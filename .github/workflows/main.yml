@@ -26,7 +26,7 @@ jobs:
       - name: Install dependencies
         run: 
           pip install -r requirements.txt
-          pip install greenlet
+          pip install --only-binary :all: greenlet
 
       - name: Run tests
         run: python3 manage.py test
