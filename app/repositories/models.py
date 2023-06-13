@@ -50,3 +50,4 @@ class Customer(db.Model):
     client_address = db.Column(db.String(128))
     client_phone = db.Column(db.String(15))
     orders = db.relationship('Order', backref=db.backref('customer_orders'))
+    

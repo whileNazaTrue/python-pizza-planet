@@ -24,6 +24,8 @@ class BeverageSerializer(ma.SQLAlchemyAutoSchema):
 
 
 class CustomerSerializer(ma.SQLAlchemyAutoSchema):
+    orders = ma.Nested('OrderSerializer', many=True, exclude=('customer',))
+
     class Meta:
         model = Customer
         load_instance = True
@@ -33,6 +35,7 @@ class CustomerSerializer(ma.SQLAlchemyAutoSchema):
             'client_dni',
             'client_address',
             'client_phone',
+            'orders'
         )
 
 
