@@ -44,7 +44,7 @@ class Order(db.Model):
     customer = db.relationship('Customer', backref=db.backref('orders_customer'))
 
 class Customer(db.Model):
-    _id = db.Column(db.Integer, primary_key=True)
+    _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     client_name = db.Column(db.String(80))
     client_dni = db.Column(db.String(10))
     client_address = db.Column(db.String(128))

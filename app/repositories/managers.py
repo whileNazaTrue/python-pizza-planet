@@ -64,9 +64,11 @@ class CustomerManager(BaseManager):
     model = Customer
     serializer = CustomerSerializer
 
+
     @classmethod
     def get_by_dni(cls, dni: str):
         return cls.session.query(cls.model).filter(cls.model.client_dni == dni).first()
+    
 
 
 

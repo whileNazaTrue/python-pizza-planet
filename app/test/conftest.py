@@ -5,12 +5,13 @@ import pytest
 from app import create_app, register_blueprints
 from app.plugins import db, ma
 # flake8: noqa
-from app.repositories.models import Ingredient, Order, Size, Beverage
+from app.repositories.models import Ingredient, Order, Size, Beverage, Customer
 
 from .fixtures.ingredient import *
 from .fixtures.order import *
 from .fixtures.size import *
 from .fixtures.beverages import *
+from .fixtures.customer import *
 
 @pytest.fixture
 def app():
