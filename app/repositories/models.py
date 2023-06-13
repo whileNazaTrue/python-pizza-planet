@@ -32,10 +32,6 @@ class OrderXBeverage(db.Model):
 
 class Order(db.Model):
     _id = db.Column(db.Integer, primary_key=True)
-    client_name = db.Column(db.String(80))
-    client_dni = db.Column(db.String(10))
-    client_address = db.Column(db.String(128))
-    client_phone = db.Column(db.String(15))
     date = db.Column(db.DateTime, default=datetime.utcnow)
     size_id = db.Column(db.Integer, db.ForeignKey('size._id'))
     size = db.relationship('Size', backref=db.backref('size'))
@@ -44,4 +40,13 @@ class Order(db.Model):
     total_price = db.Column(db.Float)
     order_x_ingredient = db.relationship('OrderXIngredient', backref=db.backref('order_x_ingredient'))
     order_x_beverage = db.relationship('OrderXBeverage', backref=db.backref('order_x_beverage'))
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer._id'))
+    customer = db.relationship('Customer', backref=db.backref('orders_customer'))
 
+class Customer(db.Model):
+    _id = db.Column(db.Integer, primary_key=True)
+    client_name = db.Column(db.String(80))
+    client_dni = db.Column(db.String(10))
+    client_address = db.Column(db.String(128))
+    client_phone = db.Column(db.String(15))
+    orders = db.relationship('Order', backref=db.backref('customer_orders'))

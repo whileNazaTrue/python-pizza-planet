@@ -2,8 +2,8 @@ from typing import Any, List, Optional, Sequence
 
 from sqlalchemy.sql import text, column
 
-from .models import Ingredient, Order, Size, db, Beverage
-from .serializers import (IngredientSerializer, OrderSerializer,SizeSerializer, BeverageSerializer, ma)
+from .models import Ingredient, Order, Size, db, Beverage, Customer
+from .serializers import (IngredientSerializer, OrderSerializer,SizeSerializer, BeverageSerializer, CustomerSerializer, ma)
 from ..common.builders.order_builder import OrderBuilder
 
 class BaseManager:
@@ -60,6 +60,15 @@ class BeverageManager(BaseManager):
     def get_by_id_list(cls, ids: Sequence):
         return cls.session.query(cls.model).filter(cls.model._id.in_(set(ids))).all() or []
 
+class CustomerManager(BaseManager):
+    model = Customer
+    serializer = CustomerSerializer
+
+    @classmethod
+    def get_by_dni(cls, dni: str):
+        return cls.session.query(cls.model).filter(cls.model.client_dni == dni).first()
+
+
 
 
 
@@ -68,12 +77,9 @@ class OrderManager(BaseManager):
     serializer = OrderSerializer
 
     @classmethod
-    def create(cls, order_data: dict, ingredients: List[Ingredient], beverages: List[Beverage]):
+    def create(cls, order_data: dict, ingredients: List[Ingredient], beverages: List[Beverage], customer: Customer):
         order_builder = OrderBuilder()
-        order_builder.with_client_name(order_data['client_name'])
-        order_builder.with_client_dni(order_data['client_dni'])
-        order_builder.with_client_address(order_data['client_address'])
-        order_builder.with_client_phone(order_data['client_phone'])
+        order_builder.with_customer_id(order_data['customer_id'])
         order_builder.with_size(order_data['size_id'])
         order_builder.with_total_price(order_data['total_price'])
         order_builder.with_ingredients(ingredients)
@@ -82,6 +88,7 @@ class OrderManager(BaseManager):
         cls.session.add(new_order)
         cls.session.commit()
         return cls.serializer().dump(new_order)
+
 
 
 

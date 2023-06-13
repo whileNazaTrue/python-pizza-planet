@@ -37,7 +37,7 @@ class OrderGenerator:
             client_dni=str(client_dni),
             client_address=fake.address(),
             client_phone=fake.phone_number(),
-            date=fake.date_time_between(start_date='-1y', end_date='now'),
+            date = fake.date_time_between(start_date='2023-01-01', end_date='2023-12-31'),
             size=sample(self.sizes, 1)[0],
             
         )

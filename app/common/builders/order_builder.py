@@ -7,20 +7,8 @@ class OrderBuilder:
         self.ingredients = []
         self.beverages = []
 
-    def with_client_name(self, client_name: str) -> 'OrderBuilder':
-        self.order_data['client_name'] = client_name
-        return self
-
-    def with_client_dni(self, client_dni: str) -> 'OrderBuilder':
-        self.order_data['client_dni'] = client_dni
-        return self
-
-    def with_client_address(self, client_address: str) -> 'OrderBuilder':
-        self.order_data['client_address'] = client_address
-        return self
-
-    def with_client_phone(self, client_phone: str) -> 'OrderBuilder':
-        self.order_data['client_phone'] = client_phone
+    def with_customer_id(self, customer_id: int) -> 'OrderBuilder':
+        self.order_data['customer_id'] = customer_id
         return self
     
     def with_size(self, size_id: int) -> 'OrderBuilder':
@@ -39,7 +27,6 @@ class OrderBuilder:
         self.beverages = beverages
         return self
     
-
     def build(self) -> Order:
         new_order = Order(**self.order_data)
         for ingredient in self.ingredients:

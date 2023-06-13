@@ -1,9 +1,8 @@
 from app.plugins import ma
-from .models import Ingredient, Size, Order, Beverage
+from .models import Ingredient, Size, Order, Beverage, Customer
 
 
 class IngredientSerializer(ma.SQLAlchemyAutoSchema):
-
     class Meta:
         model = Ingredient
         load_instance = True
@@ -11,7 +10,6 @@ class IngredientSerializer(ma.SQLAlchemyAutoSchema):
 
 
 class SizeSerializer(ma.SQLAlchemyAutoSchema):
-
     class Meta:
         model = Size
         load_instance = True
@@ -19,34 +17,40 @@ class SizeSerializer(ma.SQLAlchemyAutoSchema):
 
 
 class BeverageSerializer(ma.SQLAlchemyAutoSchema):
-    
-        class Meta:
-            model = Beverage
-            load_instance = True
-            fields = ('_id', 'name', 'price')
+    class Meta:
+        model = Beverage
+        load_instance = True
+        fields = ('_id', 'name', 'price')
 
 
-
-
+class CustomerSerializer(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Customer
+        load_instance = True
+        fields = (
+            '_id',
+            'client_name',
+            'client_dni',
+            'client_address',
+            'client_phone',
+        )
 
 
 class OrderSerializer(ma.SQLAlchemyAutoSchema):
     size = ma.Nested(SizeSerializer)
     ingredients = ma.Nested(IngredientSerializer, many=True)
     beverages = ma.Nested(BeverageSerializer, many=True)
+    customer = ma.Nested(CustomerSerializer) 
 
     class Meta:
         model = Order
         load_instance = True
         fields = (
             '_id',
-            'client_dni',
-            'client_address',
-            'client_name',
-            'client_phone',
             'date',
             'size',
             'total_price',
             'ingredients',
-            'beverages'
+            'beverages',
+            'customer'  
         )
