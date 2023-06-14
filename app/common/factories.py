@@ -33,7 +33,7 @@ class OrderGenerator:
             )
         )
 
-        order.date = fake.date_time_between(start_date=datetime(2020, 1, 1), end_date=datetime(2023, 12, 31))
+        order.date = fake.date_time_between(start_date=datetime(2023, 1, 1), end_date=datetime(2023, 12, 31))
         order.ingredients = sample(self.ingredients, num_ingredients)
         order.beverages = sample(self.beverages, num_beverages)
         order.total_price = self.calculate_total_price(order.size, order.ingredients, order.beverages)

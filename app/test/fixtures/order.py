@@ -57,7 +57,6 @@ def orders():
 
 
 
-
 @pytest.fixture
 def create_order(client, order_uri, order_data) -> dict:
     response = client.post(order_uri, json=order_data)

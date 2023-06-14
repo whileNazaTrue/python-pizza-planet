@@ -59,13 +59,12 @@ class Report(db.Model):
     year = db.Column(db.Integer, default=datetime.now().year)
     month_with_most_revenue = db.Column(db.String(15), nullable=False)
     sales_in_month_with_most_revenue = db.Column(db.Float, nullable=False)
-    customers = db.relationship('Customer', secondary='report_x_customer', backref=db.backref('reports', lazy=True))
+    top_one_customer_id = db.Column(db.Integer, db.ForeignKey('customer._id'))
+    top_two_customer_id = db.Column(db.Integer, db.ForeignKey('customer._id'))
+    top_three_customer_id = db.Column(db.Integer, db.ForeignKey('customer._id'))
+    top_one_customer = db.relationship('Customer', foreign_keys=[top_one_customer_id], backref='top_one_reports')
+    top_two_customer = db.relationship('Customer', foreign_keys=[top_two_customer_id], backref='top_two_reports')
+    top_three_customer = db.relationship('Customer', foreign_keys=[top_three_customer_id], backref='top_three_reports')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     
-class ReportXCustomer(db.Model):
-    _id = db.Column(db.Integer, primary_key=True)
-    report_id = db.Column(db.Integer, db.ForeignKey('report._id'))
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer._id'))
-    report = db.relationship('Report', backref=db.backref('report_customers'))
-    customer = db.relationship('Customer', backref=db.backref('customer_reports'))

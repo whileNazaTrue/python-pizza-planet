@@ -14,10 +14,8 @@ def __order(ingredients: list, size: dict, beverages: list, customer: dict):
     ingredients = [ingredient.get('_id') for ingredient in ingredients]
     beverages = [beverage.get('_id') for beverage in beverages]
     
-    if type(size) is dict:
-        size_id = size.get('_id')
-    else:
-        size_id = size[0]["_id"]
+    size_id = size.get('_id')
+    
 
     return {
         'ingredients': ingredients,

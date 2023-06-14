@@ -67,6 +67,10 @@ class CustomerManager(BaseManager):
 
 
     @classmethod
+    def get_by_id_list(cls, ids: Sequence):
+        return cls.session.query(cls.model).filter(cls.model._id.in_(set(ids))).all() or []
+
+    @classmethod
     def get_by_dni(cls, dni: str):
         return cls.session.query(cls.model).filter(cls.model.client_dni == dni).first()
     
@@ -98,13 +102,15 @@ class ReportManager(BaseManager):
         return cls.session.query(cls.model).filter(cls.model.date.like(f'{year}%')).all()
     
     @classmethod
-    def create(cls, report_data: dict, customers: List[Customer]):
+    def create(cls, report_data: dict):
         report_builder = ReportBuilder()
         report_builder.with_most_requested_ingredient_id(report_data['most_requested_ingredient_id'])
         report_builder.with_month_with_most_revenue(report_data['month_with_most_revenue'])
         report_builder.with_sales_in_month_with_most_revenue(report_data['sales_in_month_with_most_revenue'])
         report_builder.with_year(report_data['year'])
-        report_builder.with_customers(customers)
+        report_builder.with_top_one_customer_id(report_data['top_one_customer_id'])
+        report_builder.with_top_two_customer_id(report_data['top_two_customer_id'])
+        report_builder.with_top_three_customer_id(report_data['top_three_customer_id'])
         new_report = report_builder.build()
         cls.session.add(new_report)
         cls.session.commit()
