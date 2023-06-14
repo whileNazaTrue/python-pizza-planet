@@ -3,3 +3,5 @@ from .ingredient import IngredientController
 from .order import OrderController
 from .size import SizeController
 from .beverage import BeverageController
+from .customer import CustomerController
+from .report import ReportController

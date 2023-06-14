@@ -2,15 +2,17 @@ import random
 import string
 from typing import Any, Union
 
-
 def get_random_string() -> str:
     letters = list(string.ascii_lowercase)
     random.shuffle(letters)
     return ''.join(letters[:10])
 
+def get_random_int() -> int:
+    return random.randint(1, 1000)
 
 def get_random_choice(choices: Union[tuple, list]) -> Any:
     return random.choice(choices)
+
 
 
 def get_random_price(lower_bound: float, upper_bound: float) -> float:
