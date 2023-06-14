@@ -51,3 +51,19 @@ class Customer(db.Model):
     client_phone = db.Column(db.String(15))
     orders = db.relationship('Order', backref=db.backref('customer_orders'))
     
+
+class Report(db.Model):
+    _id = db.Column(db.Integer, primary_key=True)
+    most_requested_ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredient._id'))
+    most_requested_ingredient = db.relationship('Ingredient', backref=db.backref('report'))
+    year = db.Column(db.Integer, default=datetime.now().year)
+    month_with_most_revenue = db.Column(db.String(15), nullable=False)
+    sales_in_month_with_most_revenue = db.Column(db.Float, nullable=False)
+    customers = db.relationship('Customer', secondary='report_x_customer', backref=db.backref('reports', lazy=True))
+
+class ReportXCustomer(db.Model):
+    _id = db.Column(db.Integer, primary_key=True)
+    report_id = db.Column(db.Integer, db.ForeignKey('report._id'))
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer._id'))
+    report = db.relationship('Report', backref=db.backref('report_customers'))
+    customer = db.relationship('Customer', backref=db.backref('customer_reports'))

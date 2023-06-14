@@ -1,4 +1,4 @@
-from ...repositories.models import Ingredient, Order, Beverage, Size
+from ...repositories.models import Ingredient, Order, Beverage
 from typing import List
 
 class OrderBuilder:

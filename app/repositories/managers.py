@@ -1,10 +1,11 @@
 from typing import Any, List, Optional, Sequence
 
-from sqlalchemy.sql import text, column
+from sqlalchemy.sql import text, column, func, extract
 
-from .models import Ingredient, Order, Size, db, Beverage, Customer
-from .serializers import (IngredientSerializer, OrderSerializer,SizeSerializer, BeverageSerializer, CustomerSerializer, ma)
+from .models import Ingredient, Order, Size, db, Beverage, Customer, Report
+from .serializers import (IngredientSerializer, OrderSerializer,SizeSerializer, BeverageSerializer, CustomerSerializer, ReportSerializer,ma)
 from ..common.builders.order_builder import OrderBuilder
+from ..common.builders.report_builder import ReportBuilder
 
 class BaseManager:
     model: Optional[db.Model] = None
@@ -70,13 +71,45 @@ class CustomerManager(BaseManager):
         return cls.session.query(cls.model).filter(cls.model.client_dni == dni).first()
     
 
+    @classmethod
+    def get_order_count(cls, dni: str, year: int):
+        return (
+            cls.session.query(func.count(Order._id))
+            .join(Order.customer)
+            .filter(Customer.client_dni == dni, extract('year', Order.date) == year)
+            .scalar()
+        )
+    
+    
 
 
+class ReportManager(BaseManager):
+    model = Report
+    serializer = ReportSerializer
+
+    @classmethod
+    def get_by_year(cls, year: int):
+        return cls.session.query(cls.model).filter(cls.model.date.like(f'{year}%')).all()
+    
+    @classmethod
+    def create(cls, report_data: dict, customers: List[Customer]):
+        report_builder = ReportBuilder()
+        report_builder.with_most_requested_ingredient_id(report_data['most_requested_ingredient_id'])
+        report_builder.with_month_with_most_revenue(report_data['month_with_most_revenue'])
+        report_builder.with_sales_in_month_with_most_revenue(report_data['sales_in_month_with_most_revenue'])
+        report_builder.with_year(report_data['year'])
+        report_builder.with_customer(customers)
+        new_report = report_builder.build()
+        cls.session.add(new_report)
+        cls.session.commit()
+        return cls.serializer().dump(new_report)
+    
 
 
 class OrderManager(BaseManager):
     model = Order
     serializer = OrderSerializer
+    
 
     @classmethod
     def create(cls, order_data: dict, ingredients: List[Ingredient], beverages: List[Beverage], customer: Customer):
@@ -92,11 +125,29 @@ class OrderManager(BaseManager):
         return cls.serializer().dump(new_order)
 
 
-
-
     @classmethod
     def update(cls):
         raise NotImplementedError(f'Method not suported for {cls.__name__}')
+    
+    @classmethod
+    def get_month_with_most_revenue(cls, year: int):
+        return (
+            cls.session.query(func.extract('month', Order.date), func.sum(Order.total_price))
+            .filter(extract('year', Order.date) == year)
+            .group_by(func.extract('month', Order.date))
+            .order_by(func.sum(Order.total_price).desc())
+            .first()
+        )
+    
+    @classmethod
+    def get_most_requested_ingredient(cls, year: int):
+        return (
+            cls.session.query(Order.ingredients, func.count(Order.ingredients))
+            .filter(extract('year', Order.date) == year)
+            .group_by(Order.ingredients)
+            .order_by(func.count(Order.ingredients).desc())
+            .first()
+        )
 
 
 class IndexManager(BaseManager):

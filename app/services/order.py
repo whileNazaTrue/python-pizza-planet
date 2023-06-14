@@ -9,7 +9,6 @@ order = Blueprint('order', __name__)
 @order.route('/', methods=POST)
 def create_order():
     order, error = OrderController.create(request.json)
-    print(order)
     response = order if not error else {'error': error}
     status_code = 200 if not error else 400
     return jsonify(response), status_code

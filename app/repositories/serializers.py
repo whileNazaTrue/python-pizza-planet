@@ -1,5 +1,5 @@
 from app.plugins import ma
-from .models import Ingredient, Size, Order, Beverage, Customer
+from .models import Ingredient, Size, Order, Beverage, Customer, Report
 
 
 class IngredientSerializer(ma.SQLAlchemyAutoSchema):
@@ -57,3 +57,18 @@ class OrderSerializer(ma.SQLAlchemyAutoSchema):
             'beverages',
             'customer'  
         )
+
+class ReportSerializer(ma.SQLAlchemyAutoSchema):
+    most_requested_ingredient = ma.Nested(IngredientSerializer)
+    customers = ma.Nested(CustomerSerializer, many=True)
+
+    class Meta:
+        model = Report
+        load_instance = True
+        fields = (
+            '_id', 
+            'most_requested_ingredient', 
+            'year', 
+            'month_with_most_sales', 
+            'customers'
+            )
