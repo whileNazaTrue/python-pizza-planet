@@ -29,19 +29,12 @@ def seed_data():
         sizes.append(size)
         db.session.add(size)
 
-    regular_order_generator = OrderGenerator(sizes, ingredients, beverages)
-    specific_order_generator = OrderGenerator(sizes, ingredients, beverages)
+    order_generator = OrderGenerator(sizes, ingredients, beverages)
 
-    regular_order_factory = OrderFactory(regular_order_generator)
-    specific_order_factory = OrderFactory(specific_order_generator)
+    order_factory = OrderFactory(order_generator)
 
-    regular_order_factory.generate_orders(60)
+    order_factory.generate_orders(60)
 
-    specific_order_factory.create_orders('40123456', 25, randint(1, 5), randint(1, 3))
-    specific_order_factory.create_orders('20987654', 20, randint(1, 5), randint(1, 3))
-    specific_order_factory.create_orders('10555555', 15, randint(1, 5), randint(1, 3))
-
-    regular_order_generator.commit_orders()
-    specific_order_generator.commit_orders()
+    order_generator.commit_orders()
     db.session.commit()
     print('Seeding completed!')

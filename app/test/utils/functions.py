@@ -8,7 +8,7 @@ def get_random_string() -> str:
     return ''.join(letters[:10])
 
 def get_random_int() -> int:
-    return random.randint(1, 1000)
+    return random.randint(1, 3)
 
 def get_random_choice(choices: Union[tuple, list]) -> Any:
     return random.choice(choices)

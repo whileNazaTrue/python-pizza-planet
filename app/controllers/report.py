@@ -30,9 +30,12 @@ class ReportController(BaseController):
             'month_with_most_revenue': number_to_month(month_with_most_sales),
             'sales_in_month_with_most_revenue': sales_in_month_with_most_revenue,
             'year': year,
-            'customers': customers_with_most_orders
+            'top_one_customer_id': customers_with_most_orders[0],
+            'top_two_customer_id': customers_with_most_orders[1],
+            'top_three_customer_id': customers_with_most_orders[2]
         }
-        new_report = cls.manager.create(report, customers_with_most_orders)
+        
+        new_report = cls.manager.create(report)
 
         return new_report, None
 
@@ -57,16 +60,9 @@ class ReportController(BaseController):
             key=lambda customer: cls.customer_manager.get_order_count(customer['client_dni'], year),
             reverse=True
         )
-        limited_customers = [
-            {
-                'client_name': customer['client_name'],
-                'client_dni': customer['client_dni'],
-                'client_address': customer['client_address'],
-                'client_phone': customer['client_phone'],
-            }
-            for customer in sorted_customers[:limit]
-        ]
-        return limited_customers
+        top_customers = [customer['_id'] for customer in sorted_customers[:limit]]
+        return top_customers
+
 
 
     
