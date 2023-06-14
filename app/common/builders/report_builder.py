@@ -1,10 +1,11 @@
 from ...repositories.models import Customer, Order, Report
 from typing import List
+from datetime import datetime
 
 class ReportBuilder:
     def __init__(self):
         self.report_data = {}
-        self.customer = []
+        self.customers = []
 
     def with_most_requested_ingredient_id(self, most_requested_ingredient_id: int) -> 'ReportBuilder':
         self.report_data['most_requested_ingredient_id'] = most_requested_ingredient_id
@@ -24,15 +25,28 @@ class ReportBuilder:
         return self
 
 
-    def with_customer(self, customer: List[Customer]) -> 'ReportBuilder':
-        self.customer = customer
+    def with_customers(self, customers: List[Customer]) -> 'ReportBuilder':
+        self.customers = customers
+        return self
+        
+
+    def with_created_at(self, created_at: datetime) -> 'ReportBuilder':
+        self.report_data['created_at'] = created_at
         return self
     
     
     def build(self) -> Report:
         new_report = Report(**self.report_data)
-        for customer in self.customer:
-            new_report.customer.append(customer)
-        for order in self.orders:
-            new_report.orders.append(order)
+    
+        for customer_data in self.customers:
+            customer_info = {
+                'client_name': customer_data['client_name'],
+                'client_dni': customer_data['client_dni'],
+                'client_address': customer_data['client_address'],
+                'client_phone': customer_data['client_phone'],
+            }
+            customer = Customer(**customer_info)
+            new_report.customers.append(customer)
+    
         return new_report
+    

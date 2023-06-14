@@ -60,7 +60,9 @@ class Report(db.Model):
     month_with_most_revenue = db.Column(db.String(15), nullable=False)
     sales_in_month_with_most_revenue = db.Column(db.Float, nullable=False)
     customers = db.relationship('Customer', secondary='report_x_customer', backref=db.backref('reports', lazy=True))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    
 class ReportXCustomer(db.Model):
     _id = db.Column(db.Integer, primary_key=True)
     report_id = db.Column(db.Integer, db.ForeignKey('report._id'))

@@ -1,6 +1,6 @@
 from typing import Any, List, Optional, Sequence
 
-from sqlalchemy.sql import text, column, func, extract
+from sqlalchemy.sql import text, column, func, extract, label
 
 from .models import Ingredient, Order, Size, db, Beverage, Customer, Report
 from .serializers import (IngredientSerializer, OrderSerializer,SizeSerializer, BeverageSerializer, CustomerSerializer, ReportSerializer,ma)
@@ -70,6 +70,12 @@ class CustomerManager(BaseManager):
     def get_by_dni(cls, dni: str):
         return cls.session.query(cls.model).filter(cls.model.client_dni == dni).first()
     
+    @classmethod
+    def only_get_customer_info(cls, dni: str):
+        return cls.session.query(cls.model.client_name, cls.model.client_dni, cls.model.client_address, cls.model.client_phone ).filter(cls.model.client_dni == dni).first()
+    
+
+    
 
     @classmethod
     def get_order_count(cls, dni: str, year: int):
@@ -80,7 +86,7 @@ class CustomerManager(BaseManager):
             .scalar()
         )
     
-    
+
 
 
 class ReportManager(BaseManager):
@@ -98,11 +104,13 @@ class ReportManager(BaseManager):
         report_builder.with_month_with_most_revenue(report_data['month_with_most_revenue'])
         report_builder.with_sales_in_month_with_most_revenue(report_data['sales_in_month_with_most_revenue'])
         report_builder.with_year(report_data['year'])
-        report_builder.with_customer(customers)
+        report_builder.with_customers(customers)
         new_report = report_builder.build()
         cls.session.add(new_report)
         cls.session.commit()
         return cls.serializer().dump(new_report)
+    
+    
     
 
 
@@ -142,13 +150,24 @@ class OrderManager(BaseManager):
     @classmethod
     def get_most_requested_ingredient(cls, year: int):
         return (
-            cls.session.query(Order.ingredients, func.count(Order.ingredients))
+            cls.session.query(
+                Ingredient._id,
+                label('count', func.count(Order.ingredients))
+            )
+            .join(Order.ingredients)
+            .join(Order.order_x_ingredient)
             .filter(extract('year', Order.date) == year)
-            .group_by(Order.ingredients)
+            .group_by(Ingredient._id)
             .order_by(func.count(Order.ingredients).desc())
             .first()
         )
+    
+    @classmethod
+    def get_years_with_orders(cls):
+        years = cls.session.query(func.extract('year', Order.date)).group_by(func.extract('year', Order.date)).all()
+        return [year[0] for year in years]
 
+    
 
 class IndexManager(BaseManager):
 

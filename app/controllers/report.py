@@ -1,6 +1,6 @@
 from sqlalchemy.exc import SQLAlchemyError
 
-from ..common.utils import check_required_keys
+from ..common.utils import check_required_keys, number_to_month
 from ..repositories.managers import (ReportManager, IngredientManager, CustomerManager, OrderManager)
 from .base import BaseController
 
@@ -24,20 +24,21 @@ class ReportController(BaseController):
 
         customers_with_most_orders = cls.find_customers_with_most_orders(year, limit=3)
 
+
         report = {
             'most_requested_ingredient_id': most_requested_ingredient_id,
-            'month_with_most_sales': month_with_most_sales,
+            'month_with_most_revenue': number_to_month(month_with_most_sales),
             'sales_in_month_with_most_revenue': sales_in_month_with_most_revenue,
             'year': year,
             'customers': customers_with_most_orders
         }
         new_report = cls.manager.create(report, customers_with_most_orders)
 
-        return new_report
+        return new_report, None
 
     @classmethod
     def find_most_requested_ingredient(cls, year: int):
-        data = cls.ingredient_manager.get_most_requested_ingredient(year)
+        data = cls.order_manager.get_most_requested_ingredient(year)
         return data[0]
 
     
@@ -53,8 +54,30 @@ class ReportController(BaseController):
         customers = cls.customer_manager.get_all()
         sorted_customers = sorted(
             customers,
-            key=lambda customer: cls.customer_manager.get_order_count(customer.client_dni, year),
+            key=lambda customer: cls.customer_manager.get_order_count(customer['client_dni'], year),
             reverse=True
         )
-        return sorted_customers[:limit]
+        limited_customers = [
+            {
+                'client_name': customer['client_name'],
+                'client_dni': customer['client_dni'],
+                'client_address': customer['client_address'],
+                'client_phone': customer['client_phone'],
+            }
+            for customer in sorted_customers[:limit]
+        ]
+        return limited_customers
+
+
     
+    @staticmethod
+    def row_to_dict(row):
+        return {col: getattr(row, col) for col in row.__table__.columns.keys()}
+    
+    
+    @classmethod
+    def get_years_with_reports(cls):
+        years = cls.order_manager.get_years_with_orders()
+        years_dict_list = [{'year': year} for year in years]
+        return years_dict_list, None
+        

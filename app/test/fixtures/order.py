@@ -51,6 +51,7 @@ def order_uri():
 def order():
     return order_mock()
 
+@pytest.fixture
 def orders():
     return [order_mock() for _ in range(5)]
 

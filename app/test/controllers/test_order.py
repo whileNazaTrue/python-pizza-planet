@@ -88,7 +88,6 @@ def test_calculate_order_price(app, ingredients, size, beverages, customer):
         order = __order(created_ingredients, created_sizes, created_beverages, created_customers)
         created_order = OrderController.create(order)
         expected_total_price = round(created_sizes['price'] + sum(item['price'] for item in created_ingredients) + sum(item['price'] for item in created_beverages), 2)
-        print(expected_total_price)
         pytest.assume(created_order[0]['total_price'] == expected_total_price)
 
 def test_get_by_id(app, ingredients, size, beverages, customer):

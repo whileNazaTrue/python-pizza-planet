@@ -69,6 +69,9 @@ class ReportSerializer(ma.SQLAlchemyAutoSchema):
             '_id', 
             'most_requested_ingredient', 
             'year', 
-            'month_with_most_sales', 
-            'customers'
+            'month_with_most_revenue',
+            'sales_in_month_with_most_revenue',
+            'customers',
+            'created_at'
             )
+        
