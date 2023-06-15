@@ -14,39 +14,39 @@ on:
 
 jobs:
   commentator:
-    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - name: Comment coverage
         uses: actions/github-script@v6
         with:
           script: |
-            const new_comment = `${{ inputs.message }}`;
-            const { data: comments } = await github.rest.issues.listComments({
+            let new_comment = `${{ inputs.message }}`
+            new_comment = new_comment.replaceAll("%25", "%").replaceAll("%0A", "\n").replaceAll("%0D", "\r")
+            const {data: comments} = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
               per_page: 100
-            });
-            const comment = comments.find(comment => {
-              return (
-                comment.user.login === github.context.actor && comment.body.includes("${{ inputs.line_to_compare }}")
-              ); 
-            });
+            })
+            const comment = comments.find((comment) => {
+             return (
+               comment.user.login === 'github-actions[bot]' && comment.body.includes(
+                "${{ inputs.line_to_compare }}"
+               )
+              )
+            })
             if (comment) {
-              await github.rest.issues.updateComment({
+              github.rest.issues.updateComment({
                 comment_id: comment.id,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: new_comment,
-                token: "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
-              });
+                body: new_comment
+              })
             } else {
-              await github.rest.issues.createComment({
+              github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: new_comment,
-                token: "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
-              });
+                body: new_comment
+              })
             }
