@@ -53,7 +53,7 @@ jobs:
 
       - name: Run test coverage
         run: |
-          /usr/bin/bash -e -c "pytest --cache-clear --cov=src --cov-report=term-missing tests/ > coverage.txt"
+          pytest --cov-report term --cov=myproj app/
         shell: bash
         env:
           pythonLocation: /opt/hostedtoolcache/Python/3.8.17/x64
