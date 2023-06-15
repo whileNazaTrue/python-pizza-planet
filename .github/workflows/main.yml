@@ -14,43 +14,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8.x
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8.x
 
-    - name: Upgrade setuptools
-      run: pip install --upgrade setuptools
+      - name: Upgrade setuptools
+        run: pip install --upgrade setuptools
 
-    - name: Install requirements
-      run: pip install -r requirements.txt
+      - name: Install requirements
+        run: pip install -r requirements.txt
 
-      name: Run tests and generate report
-          run: |
-            pytest --junitxml=report.xml
-            echo "::set-output name=report_path::report.xml"
+      - name: Run tests and generate report
+        run: |
+          pytest --junitxml=report.xml
+          echo "::set-output name=report_path::report.xml"
 
-        - name: Parse test results
-          id: parse_results
-          run: |
-            python parse_results.py ${{ steps.test.outputs.report_path }}
-            echo "::set-output name=passed_tests::${{ steps.parse_results.outputs.passed_tests }}"
-            echo "::set-output name=failed_tests::${{ steps.parse_results.outputs.failed_tests }}"
-            echo "::set-output name=skipped_tests::${{ steps.parse_results.outputs.skipped_tests }}"
+      - name: Parse test results
+        id: parse_results
+        run: |
+          python parse_results.py ${{ steps.test.outputs.report_path }}
+          echo "::set-output name=passed_tests::${{ steps.parse_results.outputs.passed_tests }}"
+          echo "::set-output name=failed_tests::${{ steps.parse_results.outputs.failed_tests }}"
+          echo "::set-output name=skipped_tests::${{ steps.parse_results.outputs.skipped_tests }}"
 
-        - name: Generate chart
-          id: generate_chart
-          run: |
-            python generate_chart.py ${{ steps.parse_results.outputs.passed_tests }} ${{ steps.parse_results.outputs.failed_tests }} ${{ steps.parse_results.outputs.skipped_tests }}
-            echo "::set-output name=chart_path::chart.png"
+      - name: Generate chart
+        id: generate_chart
+        run: |
+          python generate_chart.py ${{ steps.parse_results.outputs.passed_tests }} ${{ steps.parse_results.outputs.failed_tests }} ${{ steps.parse_results.outputs.skipped_tests }}
+          echo "::set-output name=chart_path::chart.png"
 
-        - name: Upload artifacts
-          uses: actions/upload-artifact@v2
-          with:
-            name: Test Results
-            path: |
-              ${{ steps.test.outputs.report_path }}
-              ${{ steps.generate_chart.outputs.chart_path }}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test Results
+          path: |
+            ${{ steps.test.outputs.report_path }}
+            ${{ steps.generate_chart.outputs.chart_path }}
