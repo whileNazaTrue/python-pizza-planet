@@ -29,7 +29,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Change working directory
-        run: cd .github/workflows
+        run: cd ${{ github.workspace }}
 
       - name: Run tests and generate report
         run: |
@@ -39,7 +39,7 @@ jobs:
       - name: Parse test results
         id: parse_results
         run: |
-          python utils/parse_results.py ${{ steps.test.outputs.report_path }}
+          python .github/workflows/utils/parse_results.py ${{ steps.test.outputs.report_path }}
           echo "::set-output name=passed_tests::${{ steps.parse_results.outputs.passed_tests }}"
           echo "::set-output name=failed_tests::${{ steps.parse_results.outputs.failed_tests }}"
           echo "::set-output name=skipped_tests::${{ steps.parse_results.outputs.skipped_tests }}"
@@ -47,7 +47,7 @@ jobs:
       - name: Generate chart
         id: generate_chart
         run: |
-          python utils/generate_chart.py ${{ steps.parse_results.outputs.passed_tests }} ${{ steps.parse_results.outputs.failed_tests }} ${{ steps.parse_results.outputs.skipped_tests }}
+          python .github/workflows/utils/generate_chart.py ${{ steps.parse_results.outputs.passed_tests }} ${{ steps.parse_results.outputs.failed_tests }} ${{ steps.parse_results.outputs.skipped_tests }}
           echo "::set-output name=chart_path::chart.png"
 
       - name: Upload artifacts
