@@ -34,7 +34,7 @@ jobs:
       - name: Run tests and generate report
         run: |
           pytest --junitxml=report.xml
-          echo "::set-output name=report_path::report.xml"
+          echo "::set-output name=report_path::$(pwd)/report.xml"
 
       - name: Parse test results
         id: parse_results
@@ -49,6 +49,28 @@ jobs:
         run: |
           python .github/workflows/utils/generate_chart.py ${{ steps.parse_results.outputs.passed_tests }} ${{ steps.parse_results.outputs.failed_tests }} ${{ steps.parse_results.outputs.skipped_tests }}
           echo "::set-output name=chart_path::chart.png"
+
+      - name: Create comment with test results
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const passed = '${{ steps.parse_results.outputs.passed_tests }}';
+            const failed = '${{ steps.parse_results.outputs.failed_tests }}';
+            const skipped = '${{ steps.parse_results.outputs.skipped_tests }}';
+
+            const comment = `
+            **Test Results**
+            - Passed: ${passed}
+            - Failed: ${failed}
+            - Skipped: ${skipped}
+            `;
+
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment.trim()
+            })
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2

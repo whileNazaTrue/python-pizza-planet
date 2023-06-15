@@ -21,6 +21,9 @@ run-tests:
 run-seed:
 	python3 manage.py seed
 
+update-requirements:
+	pip3 freeze > requirements.txt
+
 start-database:
 	python3 manage.py db init
 	python3 manage.py db migrate
