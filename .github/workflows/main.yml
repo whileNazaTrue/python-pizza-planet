@@ -10,7 +10,7 @@ on:
       - develop
 
 jobs:
-  test:
+  tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,57 +28,58 @@ jobs:
       - name: Install requirements
         run: pip install -r requirements.txt
 
-      - name: Change working directory
-        run: cd ${{ github.workspace }}
+      - name: Run tests
+        run: python -m pytest
 
-      - name: Run tests and generate report
+  tests-coverage:
+    needs: [tests]
+    outputs:
+      coverage_message: ${{ steps.get_coverage_message.outputs.comment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8.x
+
+      - name: Upgrade setuptools
+        run: pip install --upgrade setuptools
+
+      - name: Install requirements
+        run: pip install -r requirements.txt
+
+      - name: Run test coverage
         run: |
-          pytest --junitxml=report.xml
-          echo "::set-output name=report_path::$(pwd)/report.xml"
+          pytest --cache-clear --cov-report term-missing --cov=src tests/ > coverage.txt
 
-      - name: Parse test results
-        id: parse_results
+      - name: Generate coverage markdown table
+        run: python .github/scripts/create_coverage_table.py
+
+      - name: Get total coverage
+        id: get_total_coverage
         run: |
-          python .github/workflows/utils/parse_results.py ${{ steps.test.outputs.report_path }}
-          echo "::set-output name=passed_tests::${{ steps.parse_results.outputs.passed_tests }}"
-          echo "::set-output name=failed_tests::${{ steps.parse_results.outputs.failed_tests }}"
-          echo "::set-output name=skipped_tests::${{ steps.parse_results.outputs.skipped_tests }}"
+          echo result=$(cat total_coverage) > $GITHUB_OUTPUT
 
-      - name: Generate chart
-        id: generate_chart
-        run: |
-          python .github/workflows/utils/generate_chart.py ${{ steps.parse_results.outputs.passed_tests }} ${{ steps.parse_results.outputs.failed_tests }} ${{ steps.parse_results.outputs.skipped_tests }}
-          echo "::set-output name=chart_path::chart.png"
-
-      - name: Create comment with test results
-        uses: actions/github-script@v4
+      - name: get coverage message
+        id: get_coverage_message
+        uses: actions/github-script@v6
         with:
           script: |
-            const passed = '${{ steps.parse_results.outputs.passed_tests }}';
-            const failed = '${{ steps.parse_results.outputs.failed_tests }}';
-            const skipped = '${{ steps.parse_results.outputs.skipped_tests }}';
+            const os = require("os")
+            const fs = require('fs'); 
+            const file = fs.readFileSync('./coverage_table.txt', {encoding:'utf8', flag:'r'})
+            let new_comment = "### Coverage Report for Pizza Planet" +
+            file + "\n #### Total Coverage: ${{ steps.get_total_coverage.outputs.result }}"
+            new_comment = new_comment.replaceAll("%", "%25").replaceAll("\n", "%0A").replaceAll("\r", "%0D")
+            const output = process.env['GITHUB_OUTPUT']
+            fs.appendFileSync(output, `comment=${new_comment}${os.EOL}`)
 
-            const comment = `
-            **Test Results**
-            - Passed: ${passed}
-            - Failed: ${failed}
-            - Skipped: ${skipped}
-            `;
-
-            github.pulls.createReview({
-              pull_number: ${{ github.event.pull_request.number }},
-              owner: '${{ github.repository_owner }}',
-              repo: '${{ github.repository }}',
-              body: comment.trim(),
-              event: 'COMMENT',
-              token: '${{ secrets.PERSONAL_ACCESS_TOKEN }}'
-            })
-
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: Test Results
-          path: |
-            ${{ steps.test.outputs.report_path }}
-            ${{ steps.generate_chart.outputs.chart_path }}
+  comment_coverage:
+    needs: [tests-coverage]
+    uses: ./.github/workflows/pull_request_comment.yml
+    with:
+      message: ${{ needs.tests-coverage.outputs.coverage_message }}
+      line_to_compare: "Coverage Report for Pizza Planet"
