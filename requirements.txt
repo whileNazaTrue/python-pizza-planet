@@ -4,6 +4,7 @@ attrs==21.4.0
 autopep8==1.6.0
 click==8.0.3
 colorama==0.4.6
+coverage==7.2.7
 Faker==18.10.1
 flake8==4.0.1
 Flask==2.0.2
