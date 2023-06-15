@@ -1,49 +1,72 @@
+
 import pytest
 
-from ..utils.functions import (shuffle_list, get_random_sequence,
-                               get_random_string)
+from ..utils.functions import get_random_price, get_random_string
+from .customer import create_customer
+from .ingredient import create_ingredients
+from .size import create_sizes
+from .beverages import create_beverages
+import datetime
 
 
-def client_data_mock() -> dict:
-    return {
-        'client_address': get_random_string(),
-        'client_dni': get_random_sequence(),
-        'client_name': get_random_string(),
-        'client_phone': get_random_sequence()
+
+def order_mock() -> dict:
+    return{
+        "beverages": [
+            {
+                "name": get_random_string(),
+                "price": get_random_price(10, 20)
+            }
+        ],
+        "customer": {
+            "client_address": get_random_string(),
+            "client_dni": get_random_string(),
+            "client_name": get_random_string(),
+            "client_phone": get_random_string(),
+        },
+        "date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "ingredients": [
+            {
+                "name": get_random_string(),
+                "price": get_random_price(10, 20)
+            },
+            {
+                "name": get_random_string(),
+                "price": get_random_price(10, 20)
+            }
+        ],
+        "size": {
+            "name": get_random_string(),
+            "price": get_random_price(10,20)
+        },
     }
 
 
 @pytest.fixture
 def order_uri():
-    return '/order'
+    return '/order/'
 
 
 @pytest.fixture
-def client_data():
-    return client_data_mock()
+def order():
+    return order_mock()
+
+@pytest.fixture
+def orders():
+    return [order_mock() for _ in range(5)]
+
 
 
 @pytest.fixture
-def order(create_ingredients, create_size, client_data) -> dict:
-    ingredients = [ingredient.get('_id') for ingredient in create_ingredients]
-    size_id = create_size.get('_id')
-    return {
-        **client_data_mock(),
-        'ingredients': ingredients,
-        'size_id': size_id
-    }
+def create_order(client, order_uri, order_data) -> dict:
+    response = client.post(order_uri, json=order_data)
+    return response.json()
 
 
 @pytest.fixture
-def create_orders(client, order_uri, create_ingredients, create_sizes) -> list:
-    ingredients = [ingredient.get('_id') for ingredient in create_ingredients]
-    sizes = [size.get('_id') for size in create_sizes]
+def create_orders(client, order_uri, order_data) -> list:
     orders = []
     for _ in range(10):
-        new_order = client.post(order_uri, json={
-            **client_data_mock(),
-            'ingredients': shuffle_list(ingredients)[:5],
-            'size_id': shuffle_list(sizes)[0]
-        })
-        orders.append(new_order)
+        new_order = client.post(order_uri, json=order_data)
+        orders.append(new_order.json)
     return orders
