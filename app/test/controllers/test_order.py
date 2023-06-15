@@ -9,6 +9,7 @@ def __order(ingredients: list, size: dict, beverages: list, customer: dict):
     beverages = [beverage.get('_id') for beverage in beverages]
     
     size_id = size.get('_id')
+
     
 
     return {
@@ -56,7 +57,7 @@ def test_create(app, ingredients, size, beverages, customer):
         size_id = created_sizes["_id"]
         ingredient_ids = order.pop('ingredients', [])
         beverage_ids = order.pop('beverages', [])
-        customer_id = created_order['customer']['_id']
+        customer_id = created_customers["_id"]
         ingredients_in_order = created_order.get('ingredients', [])
         beverages_in_order = created_order.get('beverages', [])
         ingredient_set = set(ingredient_ids)

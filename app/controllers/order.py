@@ -55,6 +55,6 @@ class OrderController(BaseController):
             beverages = BeverageManager.get_by_id_list(beverage_ids)
             price = cls.calculate_order_price(size.get('price'), ingredients, beverages)
             order_with_price = {**current_order, 'total_price': price, 'customer_id': customer_id}
-            return cls.manager.create(order_with_price, ingredients, beverages, customer), None
+            return cls.manager.create(order_with_price, ingredients, beverages), None
         except (SQLAlchemyError, RuntimeError) as ex:
             return None, str(ex)
