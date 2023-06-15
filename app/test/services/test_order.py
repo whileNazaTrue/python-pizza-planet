@@ -10,7 +10,6 @@ def test_create_order_service(create_beverages, create_sizes,create_ingredients,
     ingredients = create_ingredients
 
     order = create_order.json
-    print(order)
     pytest.assume(order['_id'])
     pytest.assume(order['beverages'])
     pytest.assume(order['customer'])
@@ -35,7 +34,6 @@ def test_get_by_id_service(client,order_uri, create_beverages, create_sizes,crea
     orders = []
     for _ in range(10):
         order = create_order.json
-        print(order)
         orders.append(order)
 
 
@@ -55,7 +53,6 @@ def test_get_orders(client,order_uri, create_beverages, create_sizes,create_ingr
     array = []
     for _ in range(10):
         order = create_order.json
-        print(order)
         array.append(order)
 
     response = client.get(order_uri)
@@ -63,6 +60,6 @@ def test_get_orders(client,order_uri, create_beverages, create_sizes,create_ingr
     returned_orders = {order['_id']: order for order in response.json}
     for order in array:
         pytest.assume(order['_id'] in returned_orders)
-        
+
 
 

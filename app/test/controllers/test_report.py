@@ -67,8 +67,7 @@ def test_report(app, ingredients, customers, beverages, sizes, orders):
             'year': datetime.date.today().year,
         }
         created_report, error = ReportController.create(report)
-        print(created_report)
-        print("ingredients" ,created_ingredients)
+
         pytest.assume(error is None)
         pytest.assume(created_report["most_requested_ingredient"] in created_ingredients)
         pytest.assume(created_report["top_one_customer"] is not None)
