@@ -177,8 +177,7 @@ class OrderManager(BaseManager):
     def get_years_with_orders(cls):
         years = cls.session.query(
             func.extract('year', Order.date)
-            ).group_by
-        (func.extract('year', Order.date)).all()
+            ).group_by(func.extract('year', Order.date)).all()
 
         return [year[0] for year in years]
 
