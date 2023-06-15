@@ -15,6 +15,7 @@ class ReportController(BaseController):
 
     @classmethod
     def create(cls, report_data: dict):
+
         check_required_keys(cls.__required_info, report_data)
         year = report_data['year']
 
@@ -36,7 +37,6 @@ class ReportController(BaseController):
         }
         
         new_report = cls.manager.create(report)
-
         return new_report, None
 
     @classmethod

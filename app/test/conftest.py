@@ -13,6 +13,7 @@ from .fixtures.order import *
 from .fixtures.size import *
 from .fixtures.beverages import *
 from .fixtures.customer import *
+from .fixtures.report import *
 
 
 @pytest.fixture

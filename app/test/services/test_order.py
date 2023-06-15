@@ -59,5 +59,10 @@ def test_get_orders(client,order_uri, create_beverages, create_sizes,create_ingr
         array.append(order)
 
     response = client.get(order_uri)
+    pytest.assume(response.status.startswith('200'))
+    returned_orders = {order['_id']: order for order in response.json}
+    for order in array:
+        pytest.assume(order['_id'] in returned_orders)
+        
 
 
