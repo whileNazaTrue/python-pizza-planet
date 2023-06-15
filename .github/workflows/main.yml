@@ -23,7 +23,7 @@ jobs:
         python-version: 3.8.x
 
     - name: Install requirements
-      pip install --upgrade setuptools
+      run: pip install --upgrade setuptools
 
       run: pip install -r requirements.txt
 
