@@ -1,0 +1,95 @@
+name: Python CI
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8.x
+
+      - name: Upgrade setuptools
+        run: pip install --upgrade setuptools
+
+      - name: Install requirements
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: python -m pytest
+
+  tests-coverage:
+    permissions: write-all
+
+    needs: [tests]
+    outputs:
+      coverage_message: ${{ steps.get_coverage_message.outputs.comment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8.x
+
+      - name: Upgrade setuptools
+        run: pip install --upgrade setuptools
+
+      - name: Install requirements
+        run: pip install -r requirements.txt
+
+      - name: Run test coverage
+        run: |
+          pytest --cov-report term --cov=app/test/  > coverage.txt --disable-warnings
+
+        shell: bash
+        env:
+          pythonLocation: /opt/hostedtoolcache/Python/3.8.17/x64
+          LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.17/x64/lib
+
+      - name: Generate coverage markdown table
+        run: python .github/workflows/utils/create_coverage_table.py
+
+      - name: Get total coverage
+        id: get_total_coverage
+        run: |
+          echo result=$(cat total_coverage) > $GITHUB_OUTPUT 
+
+      - name: get coverage message
+        id: get_coverage_message
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const os = require("os")
+            const fs = require('fs'); 
+            const file = fs.readFileSync('coverage.txt', {encoding:'utf8', flag:'r'})
+            let new_comment = "### Coverage Report for Pizza Planet" +
+            file + "\n #### Total Coverage: ${{ steps.get_total_coverage.outputs.result }}"
+            new_comment = new_comment.replaceAll("%", "%25").replaceAll("\n", "%0A").replaceAll("\r", "%0D")
+            const output = process.env['GITHUB_OUTPUT']
+            fs.appendFileSync(output, `comment=${new_comment}${os.EOL}`)
+
+  comment_coverage:
+    permissions: write-all
+    needs: [tests-coverage]
+    if: github.event_name == 'pull_request'
+    uses: ./.github/workflows/pull_request_comment.yml
+    with:
+      message: ${{ needs.tests-coverage.outputs.coverage_message }}
+      line_to_compare: "Coverage Report for Pizza Planet"

@@ -1,9 +1,8 @@
 from app.plugins import ma
-from .models import Ingredient, Size, Order, OrderDetail
+from .models import Ingredient, Size, Order, Beverage, Customer, Report
 
 
 class IngredientSerializer(ma.SQLAlchemyAutoSchema):
-
     class Meta:
         model = Ingredient
         load_instance = True
@@ -11,32 +10,24 @@ class IngredientSerializer(ma.SQLAlchemyAutoSchema):
 
 
 class SizeSerializer(ma.SQLAlchemyAutoSchema):
-
     class Meta:
         model = Size
         load_instance = True
         fields = ('_id', 'name', 'price')
 
 
-class OrderDetailSerializer(ma.SQLAlchemyAutoSchema):
-
-    ingredient = ma.Nested(IngredientSerializer)
-
+class BeverageSerializer(ma.SQLAlchemyAutoSchema):
     class Meta:
-        model = OrderDetail
+        model = Beverage
         load_instance = True
-        fields = (
-            'ingredient_price',
-            'ingredient'
-        )
+        fields = ('_id', 'name', 'price')
 
 
-class OrderSerializer(ma.SQLAlchemyAutoSchema):
-    size = ma.Nested(SizeSerializer)
-    detail = ma.Nested(OrderDetailSerializer, many=True)
+class CustomerSerializer(ma.SQLAlchemyAutoSchema):
+    orders = ma.Nested('OrderSerializer', many=True, exclude=('customer',))
 
     class Meta:
-        model = Order
+        model = Customer
         load_instance = True
         fields = (
             '_id',
@@ -44,8 +35,46 @@ class OrderSerializer(ma.SQLAlchemyAutoSchema):
             'client_dni',
             'client_address',
             'client_phone',
-            'date',
-            'total_price',
-            'size',
-            'detail'
         )
+
+
+class OrderSerializer(ma.SQLAlchemyAutoSchema):
+    size = ma.Nested(SizeSerializer)
+    ingredients = ma.Nested(IngredientSerializer, many=True)
+    beverages = ma.Nested(BeverageSerializer, many=True)
+    customer = ma.Nested(CustomerSerializer) 
+
+    class Meta:
+        model = Order
+        load_instance = True
+        fields = (
+            '_id',
+            'date',
+            'size',
+            'total_price',
+            'ingredients',
+            'beverages',
+            'customer'  
+        )
+
+class ReportSerializer(ma.SQLAlchemyAutoSchema):
+    most_requested_ingredient = ma.Nested(IngredientSerializer)
+    top_one_customer = ma.Nested(CustomerSerializer)
+    top_two_customer = ma.Nested(CustomerSerializer)
+    top_three_customer = ma.Nested(CustomerSerializer)
+
+    class Meta:
+        model = Report
+        load_instance = True
+        fields = (
+            '_id', 
+            'most_requested_ingredient', 
+            'year', 
+            'month_with_most_revenue',
+            'sales_in_month_with_most_revenue',
+            'top_one_customer',
+            'top_two_customer',
+            'top_three_customer',
+            'created_at'
+            )
+        
