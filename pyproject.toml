@@ -34,7 +34,7 @@ line-length = 100
 "models.py" = ["E501"]
 
 #Avoid F401 given the way the fixtures work
-"test/services" = ["F401]" 
+"test/services" = ["F401"]" 
 
 
 
