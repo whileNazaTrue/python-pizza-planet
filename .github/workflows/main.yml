@@ -32,6 +32,8 @@ jobs:
         run: python -m pytest
 
   tests-coverage:
+    permissions: write-all
+
     needs: [tests]
     outputs:
       coverage_message: ${{ steps.get_coverage_message.outputs.comment }}
@@ -53,7 +55,8 @@ jobs:
 
       - name: Run test coverage
         run: |
-           pytest --cov-report term --cov=app/test/ > coverage.txt   
+          pytest --cov-report term --cov=myproj app/  > coverage.txt --disable-warnings
+
         shell: bash
         env:
           pythonLocation: /opt/hostedtoolcache/Python/3.8.17/x64
@@ -82,6 +85,7 @@ jobs:
             fs.appendFileSync(output, `comment=${new_comment}${os.EOL}`)
 
   comment_coverage:
+    permissions: write-all
     needs: [tests-coverage]
     uses: ./.github/workflows/pull_request_comment.yml
     with:
