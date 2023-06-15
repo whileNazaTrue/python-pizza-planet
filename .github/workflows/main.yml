@@ -55,7 +55,7 @@ jobs:
 
       - name: Run test coverage
         run: |
-          pytest --cov-report term --cov=myproj app/test/  > coverage.txt --disable-warnings
+          pytest --cov-report term --cov=app/test/  > coverage.txt --disable-warnings
 
         shell: bash
         env:
