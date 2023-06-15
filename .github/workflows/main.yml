@@ -50,7 +50,10 @@ jobs:
           python .github/workflows/utils/generate_chart.py ${{ steps.parse_results.outputs.passed_tests }} ${{ steps.parse_results.outputs.failed_tests }} ${{ steps.parse_results.outputs.skipped_tests }}
           echo "::set-output name=chart_path::chart.png"
 
-      ...
+      - name: Get issue number
+        id: get_issue_number
+        run: echo "::set-output name=issue_number::${{ github.event.issue.number }}"
+
       - name: Create comment with test results
         uses: actions/github-script@v4
         with:
@@ -72,8 +75,7 @@ jobs:
               repo: context.repo.repo,
               body: comment.trim(),
               token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-            })
-...
+            });
 
 
       - name: Upload artifacts
