@@ -60,7 +60,7 @@ jobs:
           LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.17/x64/lib
 
       - name: Generate coverage markdown table
-        run: python .github/utils/create_coverage_table.py
+        run: python .github/workflows/utils/create_coverage_table.py
 
       - name: Get total coverage
         id: get_total_coverage
