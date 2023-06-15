@@ -33,6 +33,9 @@ line-length = 100
 "__init__.py" = ["E402","F401"]
 "models.py" = ["E501"]
 
+#Avoid F401 given the way the fixtures work
+"test/services" = ["F401]" 
+
 
 
 
