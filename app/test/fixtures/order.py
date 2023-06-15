@@ -1,8 +1,6 @@
 
 import pytest
 
-from ..utils.functions import get_random_price, get_random_string
-import datetime
 
 
 
@@ -32,20 +30,6 @@ def order():
 @pytest.fixture
 def orders():
     return [order_mock() for _ in range(5)]
-
-
-@pytest.fixture
-def create_order(client, order_uri) -> dict:
-    response = client.post(order_uri, json=order_mock())
-    return response
-
-@pytest.fixture
-def create_orders(client, order_uri) -> list:
-    orders = []
-    for _ in range(10):
-        new_order = client.post(order_uri, json=order_mock())
-        orders.append(new_order.json)
-    return orders
 
 
 @pytest.fixture

@@ -36,7 +36,8 @@ line-length = 100
 #Avoid F401 given the way the fixtures work
 "test/services/order" = ["F401"]
 "test/services/report" = ["F401"]
-
+"test/controllers/order" = ["F401"]
+"test/controllers/report" = ["F401"]
 
 
 

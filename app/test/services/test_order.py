@@ -1,13 +1,7 @@
 import pytest
-from pytest_mock import mocker
-from app.test.utils.functions import get_random_string, get_random_price
-import json
 
 
 def test_create_order_service(create_beverages, create_sizes,create_ingredients, create_order):
-    beverages = create_beverages
-    sizes = create_sizes
-    ingredients = create_ingredients
 
     order = create_order.json
     pytest.assume(order['_id'])
@@ -25,10 +19,8 @@ def test_create_order_service(create_beverages, create_sizes,create_ingredients,
     
 
 
-def test_get_by_id_service(client,order_uri, create_beverages, create_sizes,create_ingredients, create_order):
-    beverages = create_beverages
-    sizes = create_sizes
-    ingredients = create_ingredients
+def test_get_by_id_service(client,order_uri, create_beverages, create_sizes,
+                           create_ingredients, create_order):
     
 
     orders = []
@@ -45,10 +37,8 @@ def test_get_by_id_service(client,order_uri, create_beverages, create_sizes,crea
             pytest.assume(returned_order[param] == value)
 
 
-def test_get_orders(client,order_uri, create_beverages, create_sizes,create_ingredients, create_order):
-    beverages = create_beverages
-    sizes = create_sizes
-    ingredients = create_ingredients
+def test_get_orders(client,order_uri, create_beverages, create_sizes,
+                    create_ingredients, create_order):
     
     array = []
     for _ in range(10):

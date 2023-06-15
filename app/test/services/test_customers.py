@@ -1,6 +1,6 @@
 import pytest
 
-from app.test.utils.functions import get_random_string, get_random_price
+from app.test.utils.functions import get_random_string
 
 
 def test_create_customer_service(create_customer):
@@ -15,8 +15,12 @@ def test_create_customer_service(create_customer):
 
 def test_update_customer_service(client, create_customer, customer_uri):
     current_customer = create_customer.json
-    update_data = {**current_customer, 'client_name': get_random_string(), 'client_address': get_random_string(),
-                   'client_phone': get_random_string(), 'client_dni': get_random_string()}
+    update_data = {**current_customer, 
+                   'client_name': get_random_string(), 
+                   'client_address': get_random_string(),
+                   'client_phone': get_random_string(), 
+                   'client_dni': get_random_string()
+                   }
     response = client.put(customer_uri, json=update_data)
     pytest.assume(response.status.startswith('200'))
     updated_customer = response.json

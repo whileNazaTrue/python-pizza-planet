@@ -1,15 +1,8 @@
 import pytest
-from app.controllers import (IngredientController, OrderController, SizeController, 
-                             BeverageController, CustomerController, ReportController)
-from app.controllers.base import BaseController
 
 
-def test_create_report_service(create_beverages,create_customers, create_sizes,create_ingredients, create_orders, create_report):
-    created_ingredients = create_ingredients
-    created_customers = create_customers
-    created_beverages = create_beverages
-    created_sizes = create_sizes
-    created_orders = create_orders
+def test_create_report_service(create_beverages, create_customers, create_sizes,
+                                create_ingredients, create_orders, create_report):
 
     report = create_report.json
     pytest.assume(report['_id'])
@@ -20,12 +13,8 @@ def test_create_report_service(create_beverages,create_customers, create_sizes,c
     pytest.assume(report['top_three_customer'])
 
 
-def test_get_by_id_report_service(client, report_uri, create_beverages,create_customers, create_sizes,create_ingredients, create_orders, create_report):
-    created_ingredients = create_ingredients
-    created_customers = create_customers
-    created_beverages = create_beverages
-    created_sizes = create_sizes
-    created_orders = create_orders
+def test_get_by_id_report_service(client, report_uri, create_beverages, create_customers,
+                                   create_sizes, create_ingredients, create_orders, create_report):
 
     reports = []
     for _ in range(3):
@@ -39,12 +28,9 @@ def test_get_by_id_report_service(client, report_uri, create_beverages,create_cu
         for param, value in report.items():
             pytest.assume(returned_report[param] == value)
 
-def test_get_reports(client, report_uri, create_beverages,create_customers, create_sizes,create_ingredients, create_orders, create_report):
-    created_ingredients = create_ingredients
-    created_customers = create_customers
-    created_beverages = create_beverages
-    created_sizes = create_sizes
-    created_orders = create_orders
+
+def test_get_reports(client, report_uri, create_beverages, create_customers, 
+                     create_sizes, create_ingredients, create_orders, create_report):
 
     reports = []
     for _ in range(10):
@@ -57,4 +43,3 @@ def test_get_reports(client, report_uri, create_beverages,create_customers, crea
     for report in reports:
         for param, value in report.items():
             pytest.assume(returned_reports[report['_id']][param] == value)
-

@@ -2,7 +2,6 @@
 
 import pytest
 
-from ..utils.functions import get_random_price, get_random_string
 import datetime
 
 
