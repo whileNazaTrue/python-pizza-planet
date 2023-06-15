@@ -67,12 +67,13 @@ jobs:
 
             github.pulls.createReview({
               pull_number: ${{ github.event.pull_request.number }},
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              owner: '${{ github.repository_owner }}',
+              repo: '${{ github.repository }}',
               body: comment.trim(),
               event: 'COMMENT',
-              token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+              token: '${{ secrets.PERSONAL_ACCESS_TOKEN }}'
             })
+
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
