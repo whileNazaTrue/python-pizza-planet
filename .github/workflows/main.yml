@@ -68,7 +68,7 @@ jobs:
       - name: Get total coverage
         id: get_total_coverage
         run: |
-          echo result=$(cat total_coverage) > $GITHUB_OUTPUT
+          echo result=$(cat total_coverage) > $GITHUB_OUTPUT 
 
       - name: get coverage message
         id: get_coverage_message
