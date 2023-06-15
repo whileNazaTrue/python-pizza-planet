@@ -33,10 +33,18 @@ class OrderGenerator:
             )
         )
 
-        order.date = fake.date_time_between(start_date=datetime(2023, 1, 1), end_date=datetime(2023, 12, 31))
+        order.date = fake.date_time_between(
+            start_date=datetime(2023, 1, 1), 
+            end_date=datetime(2023, 12, 31)
+        )
+
         order.ingredients = sample(self.ingredients, num_ingredients)
         order.beverages = sample(self.beverages, num_beverages)
-        order.total_price = self.calculate_total_price(order.size, order.ingredients, order.beverages)
+        order.total_price = self.calculate_total_price(
+            order.size, 
+            order.ingredients, 
+            order.beverages
+        )
         return order
 
     def calculate_total_price(self, size, ingredients, beverages):
@@ -59,7 +67,8 @@ class OrderFactory:
             order = self.order_generator.generate_order()
             self.order_generator.orders.append(order)
 
-    def create_orders(self, client_dni=None, num_orders=None, num_ingredients=None, num_beverages=None):
+    def create_orders(self, client_dni=None, num_orders=None, 
+                      num_ingredients=None, num_beverages=None):
         for _ in range(num_orders):
             order = self.order_generator.generate_order(client_dni, num_ingredients, num_beverages)
             self.order_generator.orders.append(order)

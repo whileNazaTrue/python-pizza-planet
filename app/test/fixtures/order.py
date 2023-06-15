@@ -2,10 +2,6 @@
 import pytest
 
 from ..utils.functions import get_random_price, get_random_string
-from .customer import create_customer
-from .ingredient import create_ingredients
-from .size import create_sizes
-from .beverages import create_beverages
 import datetime
 
 

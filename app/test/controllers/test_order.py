@@ -1,13 +1,7 @@
 import pytest
-from app.controllers import (IngredientController, OrderController, SizeController)
+from app.controllers import (IngredientController, OrderController, SizeController, 
+                             BeverageController, CustomerController)
 from app.controllers.base import BaseController
-from app.controllers.ingredient import IngredientController
-from app.controllers.size import SizeController
-from app.controllers.beverage import BeverageController
-from app.controllers.customer import CustomerController
-from app.test.utils.functions import get_random_choice, shuffle_list
-from app.controllers import OrderController
-from app.repositories.managers import (IngredientManager, BeverageManager)
 
 
 def __order(ingredients: list, size: dict, beverages: list, customer: dict):
@@ -52,7 +46,8 @@ def __create_many_attributes(ingredients: list, sizes: list, beverages: list, cu
 
 def test_create(app, ingredients, size, beverages, customer):
     with app.app_context():
-        created_sizes, created_ingredients, created_beverages, created_customers = __create_many_attributes(
+        (created_sizes, created_ingredients, 
+         created_beverages, created_customers) = __create_many_attributes(
             [size], ingredients, beverages, [customer]
         )
         order = __order(created_ingredients, created_sizes, created_beverages, created_customers)
@@ -67,9 +62,14 @@ def test_create(app, ingredients, size, beverages, customer):
         ingredient_set = set(ingredient_ids)
         beverage_set = set(beverage_ids)
 
-        # Returns a set containing common elements 
-        ingredient_present = ingredient_set.intersection(item["_id"] for item in ingredients_in_order)
-        beverage_present = beverage_set.intersection(item["_id"] for item in beverages_in_order)
+        ingredient_present = ingredient_set.intersection(
+            item["_id"] 
+                for item in ingredients_in_order
+                )
+        beverage_present = beverage_set.intersection(
+            item["_id"] 
+                for item in beverages_in_order
+                )
 
         pytest.assume(ingredient_present)
         pytest.assume(beverage_present)
@@ -80,17 +80,23 @@ def test_create(app, ingredients, size, beverages, customer):
 
 def test_calculate_order_price(app, ingredients, size, beverages, customer):
     with app.app_context():
-        created_sizes, created_ingredients, created_beverages, created_customers = __create_many_attributes(
+        (created_sizes, created_ingredients, 
+         created_beverages, created_customers) = __create_many_attributes(
             [size], ingredients, beverages, [customer]
         )
         order = __order(created_ingredients, created_sizes, created_beverages, created_customers)
         created_order = OrderController.create(order)
-        expected_total_price = round(created_sizes['price'] + sum(item['price'] for item in created_ingredients) + sum(item['price'] for item in created_beverages), 2)
+        expected_total_price = round(
+            created_sizes['price'] + 
+            sum(item['price'] for item in created_ingredients) + 
+            sum(item['price'] for item in created_beverages), 2
+            )
         pytest.assume(created_order[0]['total_price'] == expected_total_price)
 
 def test_get_by_id(app, ingredients, size, beverages, customer):
     with app.app_context():
-        created_size, created_ingredients, created_beverages, created_customer = __create_many_attributes(
+        (created_size, created_ingredients, 
+         created_beverages, created_customer) = __create_many_attributes(
             ingredients, [size], beverages, [customer]
         )
         order = __order(created_ingredients, created_size, created_beverages, created_customer)
@@ -105,7 +111,8 @@ def test_get_by_id(app, ingredients, size, beverages, customer):
 
 def test_get_all(app, ingredients, size, beverages, customer):
     with app.app_context():
-        created_size, created_ingredients, created_beverages, created_customer = __create_many_attributes(
+        (created_size, created_ingredients,
+          created_beverages, created_customer) = __create_many_attributes(
             ingredients, [size], beverages, [customer]
         )
         create_orders = []

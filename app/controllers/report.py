@@ -1,7 +1,7 @@
-from sqlalchemy.exc import SQLAlchemyError
 
 from ..common.utils import check_required_keys, number_to_month
-from ..repositories.managers import (ReportManager, IngredientManager, CustomerManager, OrderManager)
+from ..repositories.managers import (ReportManager, IngredientManager,
+                                      CustomerManager, OrderManager)
 from .base import BaseController
 
 
@@ -20,15 +20,15 @@ class ReportController(BaseController):
 
         most_requested_ingredient_id = cls.find_most_requested_ingredient(year)
 
-        month_with_most_sales, sales_in_month_with_most_revenue = cls.find_month_with_most_revenue(year)
+        month_most_sales, month_most_revenue = cls.find_month_with_most_revenue(year)
 
         customers_with_most_orders = cls.find_customers_with_most_orders(year, limit=3)
 
 
         report = {
             'most_requested_ingredient_id': most_requested_ingredient_id,
-            'month_with_most_revenue': number_to_month(month_with_most_sales),
-            'sales_in_month_with_most_revenue': sales_in_month_with_most_revenue,
+            'month_with_most_revenue': number_to_month(month_most_sales),
+            'sales_in_month_with_most_revenue': month_most_revenue,
             'year': year,
             'top_one_customer_id': customers_with_most_orders[0],
             'top_two_customer_id': customers_with_most_orders[1],

@@ -3,7 +3,8 @@ from typing import Any, List, Optional, Sequence
 from sqlalchemy.sql import text, column, func, extract, label
 
 from .models import Ingredient, Order, Size, db, Beverage, Customer, Report
-from .serializers import (IngredientSerializer, OrderSerializer,SizeSerializer, BeverageSerializer, CustomerSerializer, ReportSerializer,ma)
+from .serializers import (IngredientSerializer, OrderSerializer,SizeSerializer,
+                           BeverageSerializer, CustomerSerializer, ReportSerializer,ma)
 from ..common.builders.order_builder import OrderBuilder
 from ..common.builders.report_builder import ReportBuilder
 
@@ -76,7 +77,11 @@ class CustomerManager(BaseManager):
     
     @classmethod
     def only_get_customer_info(cls, dni: str):
-        return cls.session.query(cls.model.client_name, cls.model.client_dni, cls.model.client_address, cls.model.client_phone ).filter(cls.model.client_dni == dni).first()
+        return cls.session.query(cls.model.client_name, 
+                                 cls.model.client_dni, 
+                                 cls.model.client_address,
+                                 cls.model.client_phone 
+                                 ).filter(cls.model.client_dni == dni).first()
     
 
     
@@ -126,7 +131,7 @@ class OrderManager(BaseManager):
     
 
     @classmethod
-    def create(cls, order_data: dict, ingredients: List[Ingredient], beverages: List[Beverage], customer: Customer):
+    def create(cls, order_data: dict, ingredients: List[Ingredient], beverages: List[Beverage]):
         order_builder = OrderBuilder()
         order_builder.with_customer_id(order_data['customer_id'])
         order_builder.with_size(order_data['size_id'])
@@ -170,7 +175,11 @@ class OrderManager(BaseManager):
     
     @classmethod
     def get_years_with_orders(cls):
-        years = cls.session.query(func.extract('year', Order.date)).group_by(func.extract('year', Order.date)).all()
+        years = cls.session.query(
+            func.extract('year', Order.date)
+            ).group_by
+        (func.extract('year', Order.date)).all()
+
         return [year[0] for year in years]
 
     
