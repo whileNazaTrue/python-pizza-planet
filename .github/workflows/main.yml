@@ -79,7 +79,6 @@ jobs:
             const fs = require('fs'); 
             const file = fs.readFileSync('coverage.txt', {encoding:'utf8', flag:'r'})
             let new_comment = "### Coverage Report for Pizza Planet" +
-            file + "\n #### Total Coverage: ${{ steps.get_total_coverage.outputs.result }}"
             new_comment = new_comment.replaceAll("%", "%25").replaceAll("\n", "%0A").replaceAll("\r", "%0D")
             const output = process.env['GITHUB_OUTPUT']
             fs.appendFileSync(output, `comment=${new_comment}${os.EOL}`)
