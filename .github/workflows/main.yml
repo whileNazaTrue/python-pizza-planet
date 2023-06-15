@@ -53,7 +53,7 @@ jobs:
 
       - name: Run test coverage
         run: |
-          pytest --cov-report term --cov=myproj app/ 
+           pytest --cov-report term --cov=app/test/ > coverage.txt   
         shell: bash
         env:
           pythonLocation: /opt/hostedtoolcache/Python/3.8.17/x64

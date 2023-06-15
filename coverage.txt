@@ -1,0 +1,113 @@
+============================= test session starts =============================
+platform win32 -- Python 3.10.9, pytest-6.2.5, py-1.11.0, pluggy-1.0.0
+rootdir: C:\Users\NAZARENOO\Desktop\Pizza Planet\python-pizza-planet
+plugins: Faker-18.10.1, assume-2.4.3, cov-4.1.0
+collected 32 items
+
+app\test\controllers\test_beverage.py ....                               [ 12%]
+app\test\controllers\test_customer.py ....                               [ 25%]
+app\test\controllers\test_ingredient.py ....                             [ 37%]
+app\test\controllers\test_order.py ....                                  [ 50%]
+app\test\controllers\test_size.py ....                                   [ 62%]
+app\test\services\test_beverage.py ....                                  [ 75%]
+app\test\services\test_ingredient.py ....                                [ 87%]
+app\test\services\test_size.py ....                                      [100%]
+
+============================== warnings summary ===============================
+venv\lib\site-packages\marshmallow\__init__.py:17
+  C:\Users\NAZARENOO\Desktop\Pizza Planet\python-pizza-planet\venv\lib\site-packages\marshmallow\__init__.py:17: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
+    __version_info__ = tuple(LooseVersion(__version__).version)
+
+venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:17
+venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:17
+  C:\Users\NAZARENOO\Desktop\Pizza Planet\python-pizza-planet\venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:17: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
+    _META_KWARGS_DEPRECATED = LooseVersion(ma.__version__) >= LooseVersion("3.10.0")
+
+venv\lib\site-packages\flask_marshmallow\__init__.py:34
+  C:\Users\NAZARENOO\Desktop\Pizza Planet\python-pizza-planet\venv\lib\site-packages\flask_marshmallow\__init__.py:34: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
+    __version_info__ = tuple(LooseVersion(__version__).version)
+
+venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135
+  C:\Users\NAZARENOO\Desktop\Pizza Planet\python-pizza-planet\venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135: SAWarning: relationship 'Ingredient.orders' will copy column ingredient._id to column order_x_ingredient.ingredient_id, which conflicts with relationship(s): 'Ingredient.ingredient' (copies ingredient._id to order_x_ingredient.ingredient_id), 'OrderXIngredient.ingredient' (copies ingredient._id to order_x_ingredient.ingredient_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="ingredient,ingredient"' to the 'Ingredient.orders' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+    for prop in model.__mapper__.iterate_properties:
+
+venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135
+  C:\Users\NAZARENOO\Desktop\Pizza Planet\python-pizza-planet\venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135: SAWarning: relationship 'Ingredient.orders' will copy column order._id to column order_x_ingredient.order_id, which conflicts with relationship(s): 'Order.order_ingredients' (copies order._id to order_x_ingredient.order_id), 'OrderXIngredient.order' (copies order._id to order_x_ingredient.order_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="order,order_ingredients"' to the 'Ingredient.orders' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+    for prop in model.__mapper__.iterate_properties:
+
+venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135
+  C:\Users\NAZARENOO\Desktop\Pizza Planet\python-pizza-planet\venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135: SAWarning: relationship 'Order.ingredients' will copy column order._id to column order_x_ingredient.order_id, which conflicts with relationship(s): 'Order.order_ingredients' (copies order._id to order_x_ingredient.order_id), 'OrderXIngredient.order' (copies order._id to order_x_ingredient.order_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="order,order_ingredients"' to the 'Order.ingredients' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+    for prop in model.__mapper__.iterate_properties:
+
+venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135
+  C:\Users\NAZARENOO\Desktop\Pizza Planet\python-pizza-planet\venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135: SAWarning: relationship 'Order.ingredients' will copy column ingredient._id to column order_x_ingredient.ingredient_id, which conflicts with relationship(s): 'Ingredient.ingredient' (copies ingredient._id to order_x_ingredient.ingredient_id), 'OrderXIngredient.ingredient' (copies ingredient._id to order_x_ingredient.ingredient_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="ingredient,ingredient"' to the 'Order.ingredients' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+    for prop in model.__mapper__.iterate_properties:
+
+venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135
+  C:\Users\NAZARENOO\Desktop\Pizza Planet\python-pizza-planet\venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135: SAWarning: relationship 'Beverage.orders' will copy column beverage._id to column order_x_beverage.beverage_id, which conflicts with relationship(s): 'Beverage.beverage' (copies beverage._id to order_x_beverage.beverage_id), 'OrderXBeverage.beverage' (copies beverage._id to order_x_beverage.beverage_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="beverage,beverage"' to the 'Beverage.orders' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+    for prop in model.__mapper__.iterate_properties:
+
+venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135
+  C:\Users\NAZARENOO\Desktop\Pizza Planet\python-pizza-planet\venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135: SAWarning: relationship 'Beverage.orders' will copy column order._id to column order_x_beverage.order_id, which conflicts with relationship(s): 'Order.order_beverages' (copies order._id to order_x_beverage.order_id), 'OrderXBeverage.order' (copies order._id to order_x_beverage.order_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="order,order_beverages"' to the 'Beverage.orders' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+    for prop in model.__mapper__.iterate_properties:
+
+venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135
+  C:\Users\NAZARENOO\Desktop\Pizza Planet\python-pizza-planet\venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135: SAWarning: relationship 'Order.beverages' will copy column order._id to column order_x_beverage.order_id, which conflicts with relationship(s): 'Order.order_beverages' (copies order._id to order_x_beverage.order_id), 'OrderXBeverage.order' (copies order._id to order_x_beverage.order_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="order,order_beverages"' to the 'Order.beverages' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+    for prop in model.__mapper__.iterate_properties:
+
+venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135
+  C:\Users\NAZARENOO\Desktop\Pizza Planet\python-pizza-planet\venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135: SAWarning: relationship 'Order.beverages' will copy column beverage._id to column order_x_beverage.beverage_id, which conflicts with relationship(s): 'Beverage.beverage' (copies beverage._id to order_x_beverage.beverage_id), 'OrderXBeverage.beverage' (copies beverage._id to order_x_beverage.beverage_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="beverage,beverage"' to the 'Order.beverages' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+    for prop in model.__mapper__.iterate_properties:
+
+venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135
+  C:\Users\NAZARENOO\Desktop\Pizza Planet\python-pizza-planet\venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135: SAWarning: relationship 'OrderXIngredient.order_x_ingredient' will copy column order._id to column order_x_ingredient.order_id, which conflicts with relationship(s): 'Ingredient.orders' (copies order._id to order_x_ingredient.order_id), 'Order.ingredients' (copies order._id to order_x_ingredient.order_id), 'Order.order_ingredients' (copies order._id to order_x_ingredient.order_id), 'OrderXIngredient.order' (copies order._id to order_x_ingredient.order_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="ingredients,order,order_ingredients,orders"' to the 'OrderXIngredient.order_x_ingredient' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+    for prop in model.__mapper__.iterate_properties:
+
+venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135
+  C:\Users\NAZARENOO\Desktop\Pizza Planet\python-pizza-planet\venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135: SAWarning: relationship 'Order.order_x_ingredient' will copy column order._id to column order_x_ingredient.order_id, which conflicts with relationship(s): 'Ingredient.orders' (copies order._id to order_x_ingredient.order_id), 'Order.ingredients' (copies order._id to order_x_ingredient.order_id), 'Order.order_ingredients' (copies order._id to order_x_ingredient.order_id), 'OrderXIngredient.order' (copies order._id to order_x_ingredient.order_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="ingredients,order,order_ingredients,orders"' to the 'Order.order_x_ingredient' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+    for prop in model.__mapper__.iterate_properties:
+
+venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135
+  C:\Users\NAZARENOO\Desktop\Pizza Planet\python-pizza-planet\venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135: SAWarning: relationship 'OrderXBeverage.order_x_beverage' will copy column order._id to column order_x_beverage.order_id, which conflicts with relationship(s): 'Beverage.orders' (copies order._id to order_x_beverage.order_id), 'Order.beverages' (copies order._id to order_x_beverage.order_id), 'Order.order_beverages' (copies order._id to order_x_beverage.order_id), 'OrderXBeverage.order' (copies order._id to order_x_beverage.order_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="beverages,order,order_beverages,orders"' to the 'OrderXBeverage.order_x_beverage' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+    for prop in model.__mapper__.iterate_properties:
+
+venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135
+  C:\Users\NAZARENOO\Desktop\Pizza Planet\python-pizza-planet\venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135: SAWarning: relationship 'Order.order_x_beverage' will copy column order._id to column order_x_beverage.order_id, which conflicts with relationship(s): 'Beverage.orders' (copies order._id to order_x_beverage.order_id), 'Order.beverages' (copies order._id to order_x_beverage.order_id), 'Order.order_beverages' (copies order._id to order_x_beverage.order_id), 'OrderXBeverage.order' (copies order._id to order_x_beverage.order_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="beverages,order,order_beverages,orders"' to the 'Order.order_x_beverage' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+    for prop in model.__mapper__.iterate_properties:
+
+venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135
+  C:\Users\NAZARENOO\Desktop\Pizza Planet\python-pizza-planet\venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135: SAWarning: relationship 'Order.customer_orders' will copy column customer._id to column order.customer_id, which conflicts with relationship(s): 'Customer.orders_customer' (copies customer._id to order.customer_id), 'Order.customer' (copies customer._id to order.customer_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="customer,orders_customer"' to the 'Order.customer_orders' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+    for prop in model.__mapper__.iterate_properties:
+
+venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135
+  C:\Users\NAZARENOO\Desktop\Pizza Planet\python-pizza-planet\venv\lib\site-packages\marshmallow_sqlalchemy\convert.py:135: SAWarning: relationship 'Customer.orders' will copy column customer._id to column order.customer_id, which conflicts with relationship(s): 'Customer.orders_customer' (copies customer._id to order.customer_id), 'Order.customer' (copies customer._id to order.customer_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="customer,orders_customer"' to the 'Customer.orders' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+    for prop in model.__mapper__.iterate_properties:
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+---------- coverage: platform win32, python 3.10.9-final-0 -----------
+Name                                      Stmts   Miss  Cover
+-------------------------------------------------------------
+app\test\__init__.py                          0      0   100%
+app\test\conftest.py                         33      0   100%
+app\test\controllers\__init__.py              0      0   100%
+app\test\controllers\test_beverage.py        38      0   100%
+app\test\controllers\test_customer.py        37      0   100%
+app\test\controllers\test_ingredient.py      38      0   100%
+app\test\controllers\test_order.py           73      0   100%
+app\test\controllers\test_size.py            35      0   100%
+app\test\fixtures\__init__.py                 0      0   100%
+app\test\fixtures\beverages.py               24      0   100%
+app\test\fixtures\customer.py                24      8    67%
+app\test\fixtures\ingredient.py              24      0   100%
+app\test\fixtures\order.py                   25     11    56%
+app\test\fixtures\size.py                    24      0   100%
+app\test\services\__init__.py                 0      0   100%
+app\test\services\test_beverage.py           29      0   100%
+app\test\services\test_ingredient.py         29      0   100%
+app\test\services\test_size.py               29      0   100%
+app\test\utils\functions.py                  25     10    60%
+-------------------------------------------------------------
+TOTAL                                       487     29    94%
+
+======================= 32 passed, 18 warnings in 6.39s =======================
