@@ -69,13 +69,15 @@ jobs:
             - Skipped: ${skipped}
             `;
 
-            github.issues.createComment({
-              issue_number: context.issue.number,
+            github.pulls.createReview({
+              pull_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: comment.trim(),
+              event: 'COMMENT',
               token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-            });
+            })
+
 
 
       - name: Upload artifacts
