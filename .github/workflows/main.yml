@@ -53,7 +53,11 @@ jobs:
 
       - name: Run test coverage
         run: |
-          pytest --cache-clear --cov-report term-missing --cov=src tests/ > coverage.txt
+          /usr/bin/bash -e -c "pytest --cache-clear --cov=src --cov-report=term-missing tests/ > coverage.txt"
+        shell: bash
+        env:
+          pythonLocation: /opt/hostedtoolcache/Python/3.8.17/x64
+          LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.17/x64/lib
 
       - name: Generate coverage markdown table
         run: python .github/scripts/create_coverage_table.py
