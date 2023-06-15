@@ -1,0 +1,32 @@
+name: Python CI
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  push:
+    branches:
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8.x
+
+    - name: Upgrade setuptools
+      run: pip install --upgrade setuptools
+
+    - name: Install requirements
+      run: pip install -r requirements.txt
+
+    - name: Run tests
+      run: python -m pytest
