@@ -13,13 +13,16 @@ make start-app:
 	python3 manage.py run
 
 run-linters:
-	tba
+	ruff check . --fix
 
 run-tests:
 	python3 manage.py test
 
 run-seed:
 	python3 manage.py seed
+
+update-requirements:
+	pip3 freeze > requirements.txt
 
 start-database:
 	python3 manage.py db init

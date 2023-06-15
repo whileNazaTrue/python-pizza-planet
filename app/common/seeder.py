@@ -1,5 +1,4 @@
-from datetime import datetime
-from random import randint, sample
+from random import randint
 from faker import Faker
 from app.plugins import db
 from ..repositories.models import Ingredient, Beverage, Size
