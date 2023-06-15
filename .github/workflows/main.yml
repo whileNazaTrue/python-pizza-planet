@@ -23,6 +23,8 @@ jobs:
         python-version: 3.x
 
     - name: Install requirements
+      pip install --upgrade setuptools
+
       run: pip install -r requirements.txt
 
     - name: Run tests
