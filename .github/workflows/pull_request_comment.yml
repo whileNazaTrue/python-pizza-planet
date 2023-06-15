@@ -30,7 +30,7 @@ jobs:
             const comment = comments.find(comment => {
               return (
                 comment.user.login === github.context.actor && comment.body.includes("${{ inputs.line_to_compare }}")
-              );
+              ); 
             });
             if (comment) {
               await github.rest.issues.updateComment({
