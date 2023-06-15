@@ -13,7 +13,7 @@ make start-app:
 	python3 manage.py run
 
 run-linters:
-	tba
+	ruff check . --fix
 
 run-tests:
 	python3 manage.py test
