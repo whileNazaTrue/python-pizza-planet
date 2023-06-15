@@ -53,7 +53,7 @@ jobs:
 
       - name: Run test coverage
         run: |
-          pytest --cov-report term --cov=myproj app/
+          pytest --cov-report term --cov=myproj app/ 
         shell: bash
         env:
           pythonLocation: /opt/hostedtoolcache/Python/3.8.17/x64
@@ -74,7 +74,7 @@ jobs:
           script: |
             const os = require("os")
             const fs = require('fs'); 
-            const file = fs.readFileSync('./coverage_table.txt', {encoding:'utf8', flag:'r'})
+            const file = fs.readFileSync('coverage.txt', {encoding:'utf8', flag:'r'})
             let new_comment = "### Coverage Report for Pizza Planet" +
             file + "\n #### Total Coverage: ${{ steps.get_total_coverage.outputs.result }}"
             new_comment = new_comment.replaceAll("%", "%25").replaceAll("\n", "%0A").replaceAll("\r", "%0D")
