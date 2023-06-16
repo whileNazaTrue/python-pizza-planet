@@ -13,6 +13,12 @@ order_x_beverage = db.Table(
     db.Column('beverage_id', db.Integer, db.ForeignKey('beverage._id'), primary_key=True)
 )
 
+report_x_customer = db.Table(
+    'report_x_customer',
+    db.Column('report_id', db.Integer, db.ForeignKey('report._id'), primary_key=True),
+    db.Column('customer_id', db.Integer, db.ForeignKey('customer._id'), primary_key=True)
+)
+
 class Ingredient(db.Model):
     _id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
@@ -49,3 +55,15 @@ class Customer(db.Model):
     client_address = db.Column(db.String(128))
     client_phone = db.Column(db.String(15))
     orders = db.relationship('Order', back_populates='customer')
+    reports = db.relationship('Report', secondary=report_x_customer, back_populates='top_customers')
+
+
+class Report(db.Model):
+    _id = db.Column(db.Integer, primary_key=True)
+    most_requested_ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredient._id'))
+    most_requested_ingredient = db.relationship('Ingredient', backref=db.backref('report'))
+    year = db.Column(db.Integer, default=datetime.now().year)
+    month_with_most_revenue = db.Column(db.String(15))
+    sales_in_month_with_most_revenue = db.Column(db.Float)
+    top_customers = db.relationship('Customer', secondary=report_x_customer, back_populates='reports')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)

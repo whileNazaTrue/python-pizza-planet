@@ -1,12 +1,14 @@
 from typing import Any, List, Optional, Sequence
 
-from sqlalchemy.sql import text, column, func, extract, label
+from sqlalchemy.sql import text, column, func, extract
 
 from .models import Ingredient, Order, Size, db, Beverage, Customer, Report
-from .serializers import (IngredientSerializer, OrderSerializer,SizeSerializer,
-                           BeverageSerializer, CustomerSerializer, ReportSerializer,ma)
+from .serializers import (IngredientSerializer, OrderSerializer,SizeSerializer, ReportSerializer,
+                           BeverageSerializer, CustomerSerializer,ma)
 from ..common.builders.order_builder import OrderBuilder
 from ..common.builders.report_builder import ReportBuilder
+from sqlalchemy import cast, String
+
 
 class BaseManager:
     model: Optional[db.Model] = None
@@ -72,21 +74,10 @@ class CustomerManager(BaseManager):
     @classmethod
     def get_by_id_list(cls, ids: Sequence):
         return cls.session.query(cls.model).filter(cls.model._id.in_(set(ids))).all() or []
-
+        
     @classmethod
     def get_by_dni(cls, dni: str):
         return cls.session.query(cls.model).filter(cls.model.client_dni == dni).first()
-    
-    @classmethod
-    def only_get_customer_info(cls, dni: str):
-        return cls.session.query(cls.model.client_name, 
-                                 cls.model.client_dni, 
-                                 cls.model.client_address,
-                                 cls.model.client_phone 
-                                 ).filter(cls.model.client_dni == dni).first()
-    
-
-    
 
     @classmethod
     def get_order_count(cls, dni: str, year: int):
@@ -96,6 +87,21 @@ class CustomerManager(BaseManager):
             .filter(Customer.client_dni == dni, extract('year', Order.date) == year)
             .scalar()
         )
+    
+    
+
+    @classmethod
+    def get_customers_with_most_orders(cls, year: int, limit: int):
+        return (
+            cls.session.query(Customer._id, func.count(Order._id).label('order_count'))
+            .join(Order.customer)
+            .filter(cast(func.strftime('%Y', Order.date), String) == str(year))
+            .group_by(Customer._id)
+            .order_by(func.count(Order._id).desc())
+            .limit(limit)
+            .all()
+        )
+
     
 
 
@@ -107,21 +113,22 @@ class ReportManager(BaseManager):
     @classmethod
     def get_by_year(cls, year: int):
         return cls.session.query(cls.model).filter(cls.model.date.like(f'{year}%')).all()
-    
+
     @classmethod
-    def create(cls, report_data: dict):
+    def create(cls, report_data: dict, top_customers: List[Customer]):
         report_builder = ReportBuilder()
         report_builder.with_most_requested_ingredient_id(report_data['most_requested_ingredient_id'])
         report_builder.with_month_with_most_revenue(report_data['month_with_most_revenue'])
         report_builder.with_sales_in_month_with_most_revenue(report_data['sales_in_month_with_most_revenue'])
         report_builder.with_year(report_data['year'])
-        report_builder.with_top_one_customer_id(report_data['top_one_customer_id'])
-        report_builder.with_top_two_customer_id(report_data['top_two_customer_id'])
-        report_builder.with_top_three_customer_id(report_data['top_three_customer_id'])
+        report_builder.with_top_customers(top_customers)
+
+        print("test")
         new_report = report_builder.build()
         cls.session.add(new_report)
         cls.session.commit()
         return cls.serializer().dump(new_report)
+    
     
     
     
@@ -165,15 +172,14 @@ class OrderManager(BaseManager):
         return (
             cls.session.query(
                 Ingredient._id,
-                label('count', func.count(Order.ingredients))
+                func.count(Order.ingredients)
             )
             .join(Order.ingredients)
-            .join(Order.order_x_ingredient)
             .filter(extract('year', Order.date) == year)
             .group_by(Ingredient._id)
             .order_by(func.count(Order.ingredients).desc())
             .first()
-        )
+    )
     
     @classmethod
     def get_years_with_orders(cls):
