@@ -14,5 +14,3 @@ class IngredientController(BaseController):
             return 'Invalid ingredient payload', None
 
         return cls.manager.create(current_ingredient), None
-    
-    

@@ -9,21 +9,24 @@ class BaseController:
     @classmethod
     def get_by_id(cls, _id: Any) -> Tuple[Any, Optional[str]]:
         try:
-            return cls.manager.get_by_id(_id), None
+            item = cls.manager.get_by_id(_id)
+            return item, None
         except (SQLAlchemyError, RuntimeError) as ex:
             return None, str(ex)
 
     @classmethod
     def get_all(cls) -> Tuple[Any, Optional[str]]:
         try:
-            return cls.manager.get_all(), None
+            items = cls.manager.get_all()
+            return items, None
         except (SQLAlchemyError, RuntimeError) as ex:
             return None, str(ex)
 
     @classmethod
     def create(cls, entry: dict) -> Tuple[Any, Optional[str]]:
         try:
-            return cls.manager.create(entry), None
+            created_item = cls.manager.create(entry)
+            return created_item, None
         except (SQLAlchemyError, RuntimeError) as ex:
             return None, str(ex)
 
@@ -33,6 +36,7 @@ class BaseController:
             _id = new_values.pop('_id', None)
             if not _id:
                 return None, 'Error: No id was provided for update'
-            return cls.manager.update(_id, new_values), None
+            updated_item = cls.manager.update(_id, new_values)
+            return updated_item, None
         except (SQLAlchemyError, RuntimeError) as ex:
             return None, str(ex)

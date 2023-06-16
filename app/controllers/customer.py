@@ -12,6 +12,4 @@ class CustomerController(BaseController):
         current_customer = customer.copy()
         if not check_required_keys(cls.__required_info, current_customer):
             return 'Invalid customer payload', None
-
         return cls.manager.create(current_customer), None
-    
