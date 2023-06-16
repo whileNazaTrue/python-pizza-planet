@@ -116,6 +116,6 @@ python3 manage.py test
 
 ### AWS Deployment Diagram
 
+![AWS Diagram](https://github.com/whileNazaTrue/python-pizza-planet/assets/84025828/0d025fbb-3bf0-4d52-b049-f272917c5b20)
 
-![AWS Diagram](https://github.com/whileNazaTrue/python-pizza-planet/assets/84025828/a9ba739b-fb86-45d5-acb8-4ca13ac7bfa5)
 
