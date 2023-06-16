@@ -15,5 +15,3 @@ class SizeController(BaseController):
             return 'Invalid size payload', None
 
         return cls.manager.create(current_size), None
-    
-    

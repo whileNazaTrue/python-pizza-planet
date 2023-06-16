@@ -6,6 +6,10 @@ create-venv:
 	python3 -m venv venv
 	source venv/bin/activate
 
+start-venv:
+	cd venv/Scripts && Activate && cd ../..
+
+
 install-app-dependencies:
 	pip install -r requirements.txt
 
