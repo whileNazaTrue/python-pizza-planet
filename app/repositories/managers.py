@@ -11,6 +11,7 @@ from sqlalchemy import cast, String
 
 
 
+
 class BaseManager:
     model: Optional[db.Model] = None
     serializer: Optional[ma.SQLAlchemyAutoSchema] = None
