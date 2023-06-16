@@ -3,6 +3,7 @@ from ..common.utils import check_required_keys, number_to_month
 from ..repositories.managers import (ReportManager, IngredientManager,
                                       CustomerManager, OrderManager)
 from .base import BaseController
+from sqlalchemy.exc import SQLAlchemyError
 
 
 class ReportController(BaseController):
@@ -11,11 +12,11 @@ class ReportController(BaseController):
     ingredient_manager = IngredientManager
     order_manager = OrderManager
 
-    __required_info = ('year')
+    __required_info = ('year', 'top_customers')
 
     @classmethod
     def create(cls, report_data: dict):
-
+        current_report = report_data.copy()
         check_required_keys(cls.__required_info, report_data)
         year = report_data['year']
 
@@ -24,20 +25,26 @@ class ReportController(BaseController):
         month_most_sales, month_most_revenue = cls.find_month_with_most_revenue(year)
 
         customers_with_most_orders = cls.find_customers_with_most_orders(year, limit=3)
+        customers_ids = current_report.pop('top_customers', [])
+        for customer in customers_with_most_orders:
+            customers_ids.append(customer[0])
+        print(customers_ids)
 
 
+            
         report = {
             'most_requested_ingredient_id': most_requested_ingredient_id,
             'month_with_most_revenue': number_to_month(month_most_sales),
             'sales_in_month_with_most_revenue': month_most_revenue,
             'year': year,
-            'top_one_customer_id': customers_with_most_orders[0],
-            'top_two_customer_id': customers_with_most_orders[1],
-            'top_three_customer_id': customers_with_most_orders[2]
         }
         
-        new_report = cls.manager.create(report)
-        return new_report, None
+        try:
+            top_customers = cls.customer_manager.get_by_id_list(customers_ids)
+            new_report = cls.manager.create(report, top_customers)
+            return new_report, None
+        except (SQLAlchemyError, RuntimeError) as ex:
+            return None, str(ex)
 
     @classmethod
     def find_most_requested_ingredient(cls, year: int):
@@ -52,17 +59,11 @@ class ReportController(BaseController):
         revenue = data[1]
         return month, revenue
 
+    
     @classmethod
-    def find_customers_with_most_orders(cls, year: int, limit: int = 3):
-        customers = cls.customer_manager.get_all()
-        sorted_customers = sorted(
-            customers,
-            key=lambda customer: cls.customer_manager.get_order_count(customer['client_dni'], year),
-            reverse=True
-        )
-        top_customers = [customer['_id'] for customer in sorted_customers[:limit]]
-        return top_customers
-
+    def find_customers_with_most_orders(cls, year: int, limit: int):
+        data = cls.customer_manager.get_customers_with_most_orders(year, limit)
+        return data
 
 
     

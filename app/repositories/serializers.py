@@ -35,6 +35,7 @@ class CustomerSerializer(ma.SQLAlchemyAutoSchema):
             'client_dni',
             'client_address',
             'client_phone',
+            'orders'
         )
 
 
@@ -42,7 +43,7 @@ class OrderSerializer(ma.SQLAlchemyAutoSchema):
     size = ma.Nested(SizeSerializer)
     ingredients = ma.Nested(IngredientSerializer, many=True)
     beverages = ma.Nested(BeverageSerializer, many=True)
-    customer = ma.Nested(CustomerSerializer) 
+    customer = ma.Nested(CustomerSerializer, exclude=('orders',))
 
     class Meta:
         model = Order
@@ -54,27 +55,23 @@ class OrderSerializer(ma.SQLAlchemyAutoSchema):
             'total_price',
             'ingredients',
             'beverages',
-            'customer'  
+            'customer'
         )
 
 class ReportSerializer(ma.SQLAlchemyAutoSchema):
     most_requested_ingredient = ma.Nested(IngredientSerializer)
-    top_one_customer = ma.Nested(CustomerSerializer)
-    top_two_customer = ma.Nested(CustomerSerializer)
-    top_three_customer = ma.Nested(CustomerSerializer)
+    top_customers = ma.Nested(CustomerSerializer, many=True, exclude=('orders',))
 
     class Meta:
         model = Report
         load_instance = True
         fields = (
-            '_id', 
-            'most_requested_ingredient', 
-            'year', 
+            '_id',
+            'most_requested_ingredient',
+            'year',
             'month_with_most_revenue',
             'sales_in_month_with_most_revenue',
-            'top_one_customer',
-            'top_two_customer',
-            'top_three_customer',
+            'top_customers',
             'created_at'
-            )
-        
+        )
+

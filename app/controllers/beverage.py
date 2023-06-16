@@ -13,7 +13,6 @@ class BeverageController(BaseController):
         current_beverage = size.copy()
         if not check_required_keys(cls.__required_info, current_beverage):
             return 'Invalid size payload', None
-
         return cls.manager.create(current_beverage), None
     
     

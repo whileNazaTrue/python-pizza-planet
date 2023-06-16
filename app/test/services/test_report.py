@@ -8,9 +8,8 @@ def test_create_report_service(create_beverages, create_customers, create_sizes,
     pytest.assume(report['_id'])
     pytest.assume(report['month_with_most_revenue'])
     pytest.assume(report['sales_in_month_with_most_revenue'])
-    pytest.assume(report['top_one_customer'])
-    pytest.assume(report['top_two_customer'])
-    pytest.assume(report['top_three_customer'])
+    pytest.assume(report['top_customers'])
+ 
 
 
 def test_get_by_id_report_service(client, report_uri, create_beverages, create_customers,
