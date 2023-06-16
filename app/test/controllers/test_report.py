@@ -75,12 +75,6 @@ def test_report(app, ingredients, customers, beverages, sizes, orders):
 
         pytest.assume(error is None)
         pytest.assume(created_report["most_requested_ingredient"] in created_ingredients)
-<<<<<<< HEAD
-=======
-        pytest.assume(created_report["top_one_customer"] is not None)
-        pytest.assume(created_report["top_two_customer"] is not None)
-        pytest.assume(created_report["top_three_customer"] is not None)
->>>>>>> d849ca8c4c20e72941ffca6543f8e3d545cb3193
         pytest.assume(created_report["year"] == report["year"])
         
         

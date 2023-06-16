@@ -7,7 +7,8 @@ class ReportBuilder:
         self.report_data = {}
         self.top_customers = []
 
-    def with_most_requested_ingredient_id(self, most_requested_ingredient_id: int) -> 'ReportBuilder':
+    def with_most_requested_ingredient_id(self, 
+                                          most_requested_ingredient_id: int) -> 'ReportBuilder':
         self.report_data['most_requested_ingredient_id'] = most_requested_ingredient_id
         return self
 

@@ -35,9 +35,4 @@ start-database:
 
 drop-database:
 	python3 manage.py dbdrop
-<<<<<<< HEAD
 	python3 manage.py db init
-=======
-	python3 manage.py db migrate
-	python3 manage.py db upgrade
->>>>>>> d849ca8c4c20e72941ffca6543f8e3d545cb3193
