@@ -213,13 +213,13 @@ class OrderManager(BaseManager):
     def get_most_requested_ingredient(cls, year: int):
         return (
             cls.session.query(
-                Ingredient._id,
-                func.count(Order.ingredients)
+                IngredientForOrder._id,
+                func.count(Order.ingredients_for_order)
             )
-            .join(Order.ingredients)
+            .join(Order.ingredients_for_order)
             .filter(extract('year', Order.date) == year)
-            .group_by(Ingredient._id)
-            .order_by(func.count(Order.ingredients).desc())
+            .group_by(IngredientForOrder._id)
+            .order_by(func.count(Order.ingredients_for_order).desc())
             .first()
         )
 
