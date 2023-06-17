@@ -14,7 +14,10 @@ def order_mock() -> dict:
             "client_phone": '5'
         },
         "ingredients": ['1'],
-        "size_id": '1'
+        "size_id": '1',
+        "beverages_for_order": ['1'],
+        "ingredients_for_order": ['1'],
+        "size_for_order_id": '1'
     }
 
 
