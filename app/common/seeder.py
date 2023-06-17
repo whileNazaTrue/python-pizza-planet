@@ -1,7 +1,8 @@
 from random import randint
 from faker import Faker
 from app.plugins import db
-from ..repositories.models import Ingredient, Beverage, Size, SizeForOrder, IngredientForOrder, BeverageForOrder
+from ..repositories.models import (Ingredient, Beverage, Size, 
+SizeForOrder, IngredientForOrder, BeverageForOrder)
 from .factories import OrderGenerator, OrderFactory
 
 fake = Faker()
@@ -46,7 +47,8 @@ def seed_data():
         db.session.add(size)
         db.session.add(size_for_order)
 
-    order_generator = OrderGenerator(sizes, ingredients, beverages, sizes_for_order, ingredients_for_order, beverages_for_order)
+    order_generator = OrderGenerator(sizes, ingredients, beverages, 
+                                     sizes_for_order, ingredients_for_order, beverages_for_order)
 
     order_factory = OrderFactory(order_generator)
 

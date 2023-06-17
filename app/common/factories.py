@@ -7,7 +7,8 @@ from ..repositories.models import Order, Customer
 fake = Faker()
 
 class OrderGenerator:
-    def __init__(self, sizes, ingredients, beverages, sizes_for_order, ingredients_for_order, beverages_for_order):
+    def __init__(self, sizes, ingredients, beverages, 
+                 sizes_for_order, ingredients_for_order, beverages_for_order):
         self.orders = []
         self.sizes = sizes
         self.ingredients = ingredients
