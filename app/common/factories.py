@@ -7,24 +7,21 @@ from ..repositories.models import Order, Customer
 fake = Faker()
 
 class OrderGenerator:
-    def __init__(self, sizes, ingredients, beverages):
+    def __init__(self, sizes, ingredients, beverages, sizes_for_order, ingredients_for_order, beverages_for_order):
         self.orders = []
         self.sizes = sizes
         self.ingredients = ingredients
         self.beverages = beverages
+        self.sizes_for_order = sizes_for_order
+        self.ingredients_for_order = ingredients_for_order
+        self.beverages_for_order = beverages_for_order
 
-    def generate_order(self, client_dni=None, num_ingredients=None, num_beverages=None):
+    def generate_order(self, client_dni=None):
         if client_dni is None:
             client_dni = str(fake.random_int(min=10000000, max=99999999))
 
-        if num_ingredients is None:
-            num_ingredients = randint(1, 5)
-
-        if num_beverages is None:
-            num_beverages = randint(1, 3)
-
         order = Order(
-            size=sample(self.sizes, 1)[0],
+            size_for_order=sample(self.sizes_for_order, 1)[0],
             customer=Customer(
                 client_name=fake.name(),
                 client_dni=str(client_dni),
@@ -34,23 +31,24 @@ class OrderGenerator:
         )
 
         order.date = fake.date_time_between(
-            start_date=datetime(2023, 1, 1), 
+            start_date=datetime(2023, 1, 1),
             end_date=datetime(2023, 12, 31)
         )
 
-        order.ingredients = sample(self.ingredients, num_ingredients)
-        order.beverages = sample(self.beverages, num_beverages)
+        order.ingredients_for_order = sample(self.ingredients_for_order, randint(1, 5))
+        order.beverages_for_order = sample(self.beverages_for_order, randint(1, 3))
         order.total_price = self.calculate_total_price(
-            order.size, 
-            order.ingredients, 
-            order.beverages
+            order.size_for_order,
+            order.ingredients_for_order,
+            order.beverages_for_order
         )
         return order
 
-    def calculate_total_price(self, size, ingredients, beverages):
-        ingredients_price = sum(ingredient.price for ingredient in ingredients)
-        beverages_price = sum(beverage.price for beverage in beverages)
-        total_price = size.price + ingredients_price + beverages_price
+    def calculate_total_price(self, size_for_order, ingredients_for_order, beverages_for_order):
+        size_price = size_for_order.price if size_for_order else 0
+        ingredients_price = sum(ingredient.price for ingredient in ingredients_for_order)
+        beverages_price = sum(beverage.price for beverage in beverages_for_order)
+        total_price = size_price + ingredients_price + beverages_price
         return total_price
 
     def commit_orders(self):
