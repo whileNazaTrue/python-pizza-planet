@@ -5,3 +5,6 @@ from .size import SizeController
 from .beverage import BeverageController
 from .customer import CustomerController
 from .report import ReportController
+from .ingredient_for_order import IngredientForOrderController
+from .beverage_for_order import BeverageForOrderController
+from .size_for_order import SizeForOrderController

@@ -1,14 +1,16 @@
 import pytest
 
 
-def test_create_order_service(create_beverages, create_sizes,create_ingredients, create_order):
+def test_create_order_service(create_beverages, create_sizes,create_ingredients, 
+                              create_order, create_customer, create_ingredients_for_order, 
+                              create_beverages_for_order, create_sizes_for_orders):
 
     order = create_order.json
     pytest.assume(order['_id'])
-    pytest.assume(order['beverages'])
+    pytest.assume(order['beverages_for_order'])
     pytest.assume(order['customer'])
-    pytest.assume(order['ingredients'])
-    pytest.assume(order['size'])
+    pytest.assume(order['ingredients_for_order'])
+    pytest.assume(order['size_for_order'])
     pytest.assume(order['total_price'])
     pytest.assume(order['date'])
     pytest.assume(order['customer']['_id'])
@@ -19,8 +21,9 @@ def test_create_order_service(create_beverages, create_sizes,create_ingredients,
     
 
 
-def test_get_by_id_service(client,order_uri, create_beverages, create_sizes,
-                           create_ingredients, create_order):
+def test_get_by_id_service(client, create_beverages, create_sizes,create_ingredients, 
+                              create_order, create_customer, create_ingredients_for_order, 
+                              create_beverages_for_order, create_sizes_for_orders, order_uri):
     
 
     orders = []
@@ -37,8 +40,9 @@ def test_get_by_id_service(client,order_uri, create_beverages, create_sizes,
             pytest.assume(returned_order[param] == value)
 
 
-def test_get_orders(client,order_uri, create_beverages, create_sizes,
-                    create_ingredients, create_order):
+def test_get_orders(client, create_beverages, create_sizes,create_ingredients, 
+                              create_order, create_customer, create_ingredients_for_order, 
+                              create_beverages_for_order, create_sizes_for_orders, order_uri):
     
     array = []
     for _ in range(10):

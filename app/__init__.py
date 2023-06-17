@@ -11,6 +11,7 @@ def create_app(config_class: str):
 
 def register_blueprints(flask_app):
     from app import services
+
     blueprints = inspect.getmembers(services, lambda member: isinstance(member, Blueprint))
     for name, blueprint in blueprints:
         prefix = '/' if name == 'index' else f'/{name.replace("_", "-")}'
