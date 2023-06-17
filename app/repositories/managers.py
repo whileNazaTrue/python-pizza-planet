@@ -121,7 +121,7 @@ class CustomerManager(BaseManager):
     @classmethod
     def get_by_id_list(cls, ids: Sequence):
         return cls.session.query(cls.model).filter(cls.model._id.in_(set(ids))).all() or []
-
+        
     @classmethod
     def get_by_dni(cls, dni: str):
         return cls.session.query(cls.model).filter(cls.model.client_dni == dni).first()
