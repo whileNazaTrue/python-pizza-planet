@@ -7,7 +7,7 @@ from flask_migrate import Migrate
 from app import flask_app
 from app.plugins import db
 # flake8: noqa
-from app.repositories.models import Ingredient, Order, Size
+from app.repositories.models import Ingredient, Order, Size, Beverage, Customer, IngredientForOrder
 from app.common.seeder import seed_data
 import sys
 

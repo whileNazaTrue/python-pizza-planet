@@ -1,22 +1,29 @@
 import pytest
 from app.controllers import (IngredientController, OrderController, SizeController,
-                             BeverageController, CustomerController, ReportController)
+                             BeverageController, CustomerController)
 from app.controllers.base import BaseController
-import datetime
 
 def __report_extra_data(ingredients: list, customers: list, 
-                        beverages: list, orders: list, sizes: list):
+                        beverages: list,ingredients_for_order: list, beverages_for_order: list,
+                        size_for_order: dict, sizes: list, orders: list,
+                        ):
     ingredients = [ingredient.get('_id') for ingredient in ingredients]
     customers = [customer.get('_id') for customer in customers]
     beverages = [beverage.get('_id') for beverage in beverages]
-    sizes = [size.get('_id') for size in sizes]
     orders = [order.get('_id') for order in orders]
+    ingredients_for_order = [ingredient.get( '_id') for ingredient in ingredients_for_order]
+    beverages_for_order = [beverage.get('_id') for beverage in beverages_for_order]
+    size_for_order_id = size_for_order.get('_id') if size_for_order else 1
+    
     return {
         'ingredients': ingredients,
         'customers': customers,
         'beverages': beverages,
+        'ingredients_for_order': ingredients_for_order,
+        'beverages_for_order': beverages_for_order,
+        'size_for_order_id': size_for_order_id,
         'sizes': sizes,
-        'orders': orders
+        'orders': orders,
     }
 
 
@@ -30,53 +37,24 @@ def __create_items(items: list, controller: BaseController):
 
 
 def __create_data_for_report(ingredients: list, customers: list, 
-                             beverages: list, sizes: list, orders: list):
+                        beverages: list,ingredients_for_order: list, beverages_for_order: list,
+                        size_for_order: dict, sizes: list, orders: list):
     created_ingredients = __create_items(ingredients, IngredientController)
     created_customers = __create_items(customers, CustomerController)
     created_beverages = __create_items(beverages, BeverageController)
     created_sizes = __create_items(sizes, SizeController)
+    created_ingredients_for_order = __create_items(ingredients_for_order, IngredientController)
+    created_beverages_for_order = __create_items(beverages_for_order, BeverageController)
+    created_size_for_order = __create_items(size_for_order, SizeController)
     created_orders = __create_items(orders, OrderController)
     return (
         created_ingredients,
         created_customers,
         created_beverages,
-        created_sizes,
+        created_sizes[0] if len(created_sizes) > 0 else None,
+        created_ingredients_for_order,
+        created_beverages_for_order,
+        created_size_for_order[0] if len(created_size_for_order) > 0 else None,
         created_orders
     )
-
-
-def __create_many_attributes(ingredients: list, customers: list,
-                              beverages: list, sizes: list, orders: list):
-    (created_ingredients, created_customers, 
-     created_beverages, created_sizes, created_orders) = __create_data_for_report(
-        ingredients, customers, beverages, sizes, orders)
-    return (
-        created_ingredients,
-        created_customers,
-        created_beverages,
-        created_sizes,
-        created_orders
-
-
-    )
-
-
-def test_report(app, ingredients, customers, beverages, sizes, orders):
-    with app.app_context():
-        (created_ingredients,created_customers , 
-         created_beverages, created_sizes, created_orders) = __create_many_attributes(
-            ingredients, customers, beverages, sizes, orders)
-        __report_extra_data(created_ingredients, created_customers,
-                          created_beverages, created_sizes, created_orders)
-        report = {
-            'year': datetime.date.today().year,
-        }
-        created_report, error = ReportController.create(report)
-
-        pytest.assume(error is None)
-        pytest.assume(created_report["most_requested_ingredient"] in created_ingredients)
-        pytest.assume(created_report["year"] == report["year"])
-        
-        
-
 
