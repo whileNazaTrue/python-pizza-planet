@@ -52,15 +52,19 @@ _For windows users:_
 - Install all necessary dependencies:
 
 ```bash
-pip3 install -r requirements.txt
+make install-app-dependencies
 ```
 
 - Start the database (Only needed for the first run):
 
 ```bash
-python3 manage.py db init
-python3 manage.py db migrate
-python3 manage.py db upgrade
+make start-database
+```
+
+You can also seed it with
+
+```bash
+make run-seed
 ```
 
 - If you want to use the hot reload feature set FLASK_ENV before running the project:
@@ -80,7 +84,7 @@ set FLASK_ENV=development
 - Run the project with:
 
 ```bash
-python3 manage.py run
+make start-app
 ```
 
 ## Running the frontend
@@ -110,7 +114,7 @@ ext install ritwickdey.LiveServer
 - Run the test command
 
 ```bash
-python3 manage.py test
+make run-tests
 ```
 
 
